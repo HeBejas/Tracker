@@ -1,0 +1,13 @@
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "full_name": "admin",
+  "password_hash": "123",
+  "role_id": 1,
+  "email": "admi1n@test.com",
+  "status_id": 2
+}
+
+
+//DELETE http://localhost:8080/api/users/5
