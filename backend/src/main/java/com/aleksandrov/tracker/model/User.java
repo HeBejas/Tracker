@@ -1,19 +1,19 @@
-package com.aleksandrov.tracker.entity;
+package com.aleksandrov.tracker.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "users")
-@Data
+@Entity // Этот класс отображение таблицы
+@Table(name = "users") // Таблица в бд "users"
+@Data //Lombok создает шаблонные команды
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Отмечает поле PK
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //указывает стратегию автоматического создания ID
     private Long id;
 
-    @Column(name = "workspace_id")
+    @Column(name = "workspace_id") // АННОТАЦИЯ. Параметры колонки
     private Integer workspaceId;
 
     @Column(name = "role_id", nullable = false)

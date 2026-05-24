@@ -8,47 +8,27 @@ const router = useRouter() // 2. Инициализируй роутер
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
-const userRole = ref('')
 
 // Переменные для проверки связи с БД
-const dbRoles = ref([])
 const dbConnectionError = ref('')
 
 // Функция, которая идет на бэкенд за ролями
-const fetchRolesFromDb = async () => {
-  dbConnectionError.value = ''
-  try {
-    const response = await axios.get('http://localhost:8080/api/roles')
-    dbRoles.value = response.data
-    console.log('Фронт успешно получил роли из бэка:', response.data)
-  } catch (error) {
-    dbConnectionError.value = 'Фронтенд не смог связаться с бэкендом!'
-    console.error('Ошибка запроса ролей:', error)
-  }
-}
 
 // Запускаем проверку автоматически, как только страница откроется в браузере
-onMounted(() => {
-  fetchRolesFromDb()
-})
+// onMounted(() => {
+//   fetchRolesFromDb()
+// })
 
 const handleLogin = async () => {
   errorMessage.value = ''
   try {
     const response = await axios.post('http://localhost:8080/api/auth/login', {
       email: email.value,
-      passwordHash: password.value
+      password: password.value
     })
-
-    if (response.data.success) {
-      userRole.value = response.data.role
-      alert(`Вход выполнен! Твоя роль: ${userRole.value}`)
-
-      // 3. ПЕРЕХОД БЕЗ ПЕРЕЗАГРУЗКИ:
-      router.push('/dashboard')
-    }
+    alert(`Вход выполнен!: ${response.data}`)
   } catch (error) {
-    // ... обработка ошибок
+    alert("Неверный email или пароль")
   }
 }
 </script>
@@ -56,25 +36,7 @@ const handleLogin = async () => {
 <template>
   <div class="auth-container">
     <div class="auth-card">
-
-      <div class="db-test-zone">
-        <h4>Статус подключения к БД:</h4>
-        <p v-if="dbConnectionError" class="error-text">{{ dbConnectionError }}</p>
-        <div v-else-if="dbRoles.length > 0">
-          <p class="success-text">Связь ОК! Роли в базе:</p>
-          <ul class="roles-list">
-            <li v-for="role in dbRoles" :key="role.id">
-              ID: {{ role.id }} — <strong>{{ role.name }}</strong>
-            </li>
-          </ul>
-        </div>
-        <p v-else>Загрузка данных из БД...</p>
-      </div>
-
-      <hr />
-
       <h2>Вход в систему</h2>
-
       <div class="form-group">
         <label>Электронная почта</label>
         <input v-model="email" type="email" placeholder="example@mail.com" />
