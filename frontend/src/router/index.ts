@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginPage from '../pages/LoginPage.vue'
 import DashboardPage from '../pages/DashboardPage.vue'
 
 const routes = [
-  { path: '/', component: LoginPage },
-  { path: '/dashboard', component: DashboardPage }
+  { path: '/', redirect: '/login', meta: { requiresLayout: false }},
+  { path: '/login', name: 'Login', component: () => import('../pages/LoginPage.vue')  },
+  { path: '/home', name: 'Home', component: () => import('../pages/HomePage.vue'), meta: { breadcrumb: 'Главная' } }
 ]
 
 const router = createRouter({

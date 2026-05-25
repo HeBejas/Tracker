@@ -26,7 +26,7 @@ const handleLogin = async () => {
       email: email.value,
       password: password.value
     })
-    alert(`Вход выполнен!: ${response.data}`)
+    router.push('/home')
   } catch (error) {
     alert("Неверный email или пароль")
   }
