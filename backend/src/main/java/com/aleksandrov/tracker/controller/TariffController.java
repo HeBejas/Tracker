@@ -89,4 +89,6 @@ public class TariffController {
             return ResponseEntity.internalServerError().body("Ошибка: " + e.getMessage());
         }
     }
+
+
 }

@@ -1,0 +1,10 @@
+POST http://localhost:8080/api/auth/invite/employee
+Content-Type: application/json
+
+{
+  "email": "employee@test.com",
+  "fullName": "Иван Сотрудников",
+  "workspaceId": 2,
+  "projectId": null,
+  "inviterId": 4
+}

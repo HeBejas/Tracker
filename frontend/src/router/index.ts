@@ -45,10 +45,22 @@ const routes = [
                 meta: { breadcrumb: 'Дашборд' }
               },
               {
-                path: 'tasks',
-                name: 'WorkspaceTasks',
-                component: () => import('../pages/admin/workspace/WorkspaceTasks.vue'),
-                meta: { breadcrumb: 'Задачи' }
+                path: 'projects',
+                name: 'WorkspaceProjects',
+                component: () => import('../pages/admin/workspace/WorkspaceProjects.vue'),
+                meta: { breadcrumb: 'Проекты' }
+              },
+              {
+                path: 'employees',
+                name: 'WorkspaceEmployees',
+                component: () => import('../pages/admin/workspace/WorkspaceEmployees.vue'),
+                meta: { breadcrumb: 'Сотрудники' }
+              },
+              {
+                path: 'reports',
+                name: 'WorkspaceReports',
+                component: () => import('../pages/admin/workspace/WorkspaceReports.vue'),
+                meta: { breadcrumb: 'Отчеты' }
               },
               {
                 path: 'settings',

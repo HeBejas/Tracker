@@ -12,17 +12,13 @@
 
           <div class="title-wrapper">
             <span class="subtitle">Управление рабочей средой</span>
-            <h2>{{ projectId }}</h2>
+            <h2>{{ workspaceId }}</h2>
           </div>
         </div>
-
-<!--        <div class="header-right">-->
-<!--          <button class="action-btn primary">+ Новая задача</button>-->
-<!--        </div>-->
       </header>
 
       <div class="project-content">
-        <router-view />
+        <router-view :workspace-id="Number(workspaceId)" />
       </div>
 
     </div>
@@ -40,14 +36,17 @@ const route = useRoute()
 const router = useRouter()
 
 // Получаем ID из URL (например, из /admin/projects/123 достанет "123")
-const projectId = route.params.id
+const workspaceId = route.params.id
+console.log(workspaceId)
 
 // Формируем ссылки для хедера. Пути должны строго совпадать с твоим router.js!
 const projectLinks = computed(() => {
   return [
-    `/admin/workspaces/${projectId}/dashboard`,
-    `/admin/workspaces/${projectId}/tasks`,
-    `/admin/workspaces/${projectId}/settings`
+    `/admin/workspaces/${workspaceId}/dashboard`,
+    `/admin/workspaces/${workspaceId}/projects`,
+    `/admin/workspaces/${workspaceId}/employees`,
+    `/admin/workspaces/${workspaceId}/reports`,
+    `/admin/workspaces/${workspaceId}/settings`
   ]
 })
 
