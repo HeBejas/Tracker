@@ -3,8 +3,8 @@
 
     <div class="sidebar-top">
       <div class="logo-container">
-        <div class="logo-icon">💠</div>
-        <div v-show="!isCollapsed" class="logo-text">MyTracker</div>
+<!--        <div class="logo-icon">💠</div>-->
+        <div v-show="!isCollapsed" class="logo-text">Трекер</div>
       </div>
 
       <nav class="nav-group">
@@ -21,6 +21,18 @@
         <SideBarNavItem to="/history" :isCollapsed="isCollapsed">
           <template #icon>⏱️</template>
           История
+        </SideBarNavItem>
+
+        <SideBarNavItem to="/history" :isCollapsed="isCollapsed">
+          <template #icon>👥</template>
+          Добавить Пользователя
+        </SideBarNavItem>
+
+        <SideBarNavItem to="/admin" :isCollapsed="isCollapsed">
+<!--            v-if="authStore.userRole === 1" to="/admin" :isCollapsed="isCollapsed"-->
+
+          <template #icon>🛡️</template>
+          Администрирование
         </SideBarNavItem>
       </nav>
 
@@ -71,23 +83,23 @@
 <script setup>
 import { ref } from 'vue'
 import SideBarNavItem from '../nav/SideBarNavItem.vue'
+import { useAuthStore } from '../../stores/auth'
 
 const isCollapsed = ref(false)
-
+const authStore = useAuthStore()
 const toggleSettingsPanel = () => {
-  console.log('Здесь открывается второе выезжающее меню как на скрине!')
-  // Тут будешь менять стейт для открытия дополнительной панели
+  console.log('Панель меню')
 }
 </script>
 
 <style scoped>
+
 .sidebar {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 240px;
   height: 100vh;
-  background-color: #f8f9fa;
   border-right: 1px solid #e0e0e0;
   transition: width 0.3s ease;
   box-sizing: border-box;

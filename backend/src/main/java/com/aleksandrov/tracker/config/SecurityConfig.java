@@ -9,23 +9,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity // Говорим Спрингу, что тут лежат настройки безопасности
+@EnableWebSecurity
 public class SecurityConfig {
 
-    // ВОТ ЭТОТ МЕТОД СОЗДАЕТ ТОТ САМЫЙ БИН, КОТОРЫЙ ИЩЕТ ТВОЙ КОНТРОЛЛЕР!
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/**").permitAll()
+                        .anyRequest().permitAll()
+                );
+
+        return http.build();
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    // Настройка доступов, чтобы Спринг не блокировал запросы к авторизации
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Открываем доступ для логина, инвайтов и системной реги
-                        .anyRequest().authenticated()
-                );
-        return http.build();
     }
 }

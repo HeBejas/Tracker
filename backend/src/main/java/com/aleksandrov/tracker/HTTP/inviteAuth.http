@@ -2,8 +2,8 @@ POST http://localhost:8080/api/auth/invite
 Content-Type: application/json
 
 {
-  "email": "employee@company.com",
-  "fullName": "Иван Работяга",
+  "email": "employee3@company.com",
+  "fullName": "Владимир Ручкин",
   "workspaceId": null,
   "roleId": 3,
   "inviterId": 4

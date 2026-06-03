@@ -16,11 +16,13 @@ public class User {
     @Column(name = "workspace_id") // АННОТАЦИЯ. Параметры колонки
     private Integer workspaceId;
 
-    @Column(name = "role_id", nullable = false)
-    private Integer roleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private UserRole role;
 
-    @Column(name = "status_id", nullable = false)
-    private Integer statusId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", nullable = false)
+    private UserStatus status;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;

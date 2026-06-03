@@ -1,7 +1,6 @@
 <template>
-  <div v-if="$route.meta.requiresLayout !== false" class="app-layout">
+  <div v-if="!$route.meta.HideLayout && $route.path !== '/'" class="app-layout">
     <AppSidebar class="sidebar" />
-
     <div class="main-wrapper">
       <AppHeader class="header" />
       <main class="content-area">
@@ -21,13 +20,9 @@ import AppSidebar from './components/layout/MainSidebarComponent.vue'
 import AppHeader from './components/layout/MainHeaderComponent.vue'
 </script>
 
-<style>
-body {
-  margin: 0;
-  font-family: sans-serif;
-}
+<style scoped>
 
-/* Стили для формы логина (на весь экран, без меню) */
+
 .blank-layout {
   width: 100vw;
   height: 100vh;
@@ -40,11 +35,7 @@ body {
   overflow: hidden;
 }
 
-.sidebar {
-  width: 250px;
-  background-color: #2c3e50;
-  color: white;
-}
+
 
 .main-wrapper {
   flex-grow: 1;
@@ -65,13 +56,3 @@ body {
   background-color: #f9f9f9;
 }
 </style>
-
-
-<!--<script setup>-->
-<!--import LoginPage from './pages/LoginPage.vue'-->
-<!--import './assets/main.css'-->
-<!--</script>-->
-
-<!--<template>-->
-<!--  <LoginPage />-->
-<!--</template>-->
