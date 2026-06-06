@@ -8,27 +8,27 @@
       </div>
 
       <nav class="nav-group">
-        <SideBarNavItem to="/tasks" :isCollapsed="isCollapsed">
+        <SideBarNavItem v-if="authStore.userRole !== 'admin'"  to="/tasks" :isCollapsed="isCollapsed">
           <template #icon>📋</template>
           Задачи
         </SideBarNavItem>
 
-        <SideBarNavItem to="/projects" :isCollapsed="isCollapsed">
+        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/projects" :isCollapsed="isCollapsed">
           <template #icon>📁</template>
           Проекты
         </SideBarNavItem>
 
-        <SideBarNavItem to="/history" :isCollapsed="isCollapsed">
+        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/history" :isCollapsed="isCollapsed">
           <template #icon>⏱️</template>
           История
         </SideBarNavItem>
 
-        <SideBarNavItem to="/history" :isCollapsed="isCollapsed">
+        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/history" :isCollapsed="isCollapsed">
           <template #icon>👥</template>
           Добавить Пользователя
         </SideBarNavItem>
 
-        <SideBarNavItem to="/admin" :isCollapsed="isCollapsed">
+        <SideBarNavItem v-if="authStore.userRole === 'admin'" to="/admin" :isCollapsed="isCollapsed">
 <!--            v-if="authStore.userRole === 1" to="/admin" :isCollapsed="isCollapsed"-->
 
           <template #icon>🛡️</template>
@@ -81,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import SideBarNavItem from '../nav/SideBarNavItem.vue'
 import { useAuthStore } from '../../stores/auth'
 
@@ -89,7 +89,12 @@ const isCollapsed = ref(false)
 const authStore = useAuthStore()
 const toggleSettingsPanel = () => {
   console.log('Панель меню')
+
 }
+
+onMounted(() =>{
+  console.log( authStore.userRole)
+})
 </script>
 
 <style scoped>

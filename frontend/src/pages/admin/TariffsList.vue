@@ -42,7 +42,7 @@
         @confirm="onDeleteConfirm"
     />
 
-    <UpdateModal
+    <EditModal
         :show="showEditModal"
         :title="`Изменить «${selectedTariff?.name}»`"
         :fields="tariffFormFields"
@@ -66,7 +66,7 @@ import AdminWrapperComponent from "../../components/admin/AdminWrapperComponent.
 import CreateModal from "../../components/modals/CreateModal.vue";
 import DeleteModal from "../../components/modals/DeleteModal.vue"
 import InspectModal from "../../components/modals/InspectModal.vue";
-import UpdateModal from "../../components/modals/UpdateModal.vue";
+import EditModal from "../../components/modals/EditModal.vue";
 
 const adminLinks = [
   '/admin/workspaces',
@@ -125,8 +125,8 @@ const tariffFormFields = [
     label: 'Статус',
     type: 'select',
     options: [
-      { value: 1, label: 'Активный' },
-      { value: 2, label: 'Архивный' }
+      { value: 'active', label: 'Активный' },
+      { value: 'archived', label: 'Архивный' }
     ]
   }
 ]

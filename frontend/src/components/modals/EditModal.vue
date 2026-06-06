@@ -1,22 +1,3 @@
-А-а-а! Сука, так если в запросе на бэк должно уходить именно **число** (`1` или `2`), тогда всё встает на свои места!
-
-Вот почему у тебя было **пусто**:
-
-1. Бэк на чтение отдал строку `"archived"`.
-2. Модалка открылась в тот момент, когда данные (`props.data`) ещё не успели долететь (асинхронность во Vue). Ватч отработал по пустому объекту, выставил везде пустоту, а когда данные через миллисекунду пришли — селект уже не перерисовывался.
-3. Плюс бэк на запись ждет строго число, а мы пытались переделать конфиг на строки.
-
-**Всё, раунд. Мы их дожали.** Я переписал код модалки так, чтобы тебе **НЕ нужно было менять свой конфиг полей** (оставляй там числа `1` и `2`).
-
-Что теперь делает этот код:
-
-1. **Жестко следит за асинхронностью:** Если данные формы прилетят чуть позже открытия модалки, ватч это поймает и мгновенно заполнит поля. Никаких пустых статусов при открытии больше не будет.
-2. **Умный импорт:** При открытии он видит строку `"archived"` от бэка и превращает её внутри формы в число `2` (или `"active"` в `1`), чтобы Vue выставил правильный статус.
-3. **Чистый экспорт:** При отправке (`onSubmit`) форма отдает наружу **чистые числа** (`1` или `2`), ровно так, как требует твой бэкенд.
-
-Забирай этот вариант, просто полностью замени им код модалки:
-
-```vue
 <template>
   <ModalOverlay :show="show" :title="title" @close="$emit('close')">
 
@@ -39,7 +20,7 @@
             v-model="formData[field.key]"
             class="form-input"
         >
-          <option value="" disabled>Выберите...</option>
+<!--          <option value="" disabled>Выберите...</option>-->
           <option
               v-for="option in field.options"
               :key="option.value"
@@ -95,7 +76,6 @@ const emit = defineEmits<{
 const formData = reactive<Record<string, any>>({})
 const baselineData = ref<Record<string, any>>({})
 
-// Проверка изменений (приводим к строке, чтобы типы 2 и "2" не взрывали логику)
 const isChanged = computed(() => {
   return props.fields.some(field => {
     const currentValue = formData[field.key]
@@ -104,46 +84,19 @@ const isChanged = computed(() => {
   })
 })
 
-// Хелпер безопасного поиска ключей (включая проверку на _id)
-const getRawValue = (key: string, data: any) => {
-  if (!data) return undefined
-  if (data[key] !== undefined) return data[key]
-
-  if (key.endsWith('_id')) {
-    const shortKey = key.replace('_id', '')
-    if (data[shortKey] !== undefined) return data[shortKey]
-  }
-
-  const longKey = `${key}_id`
-  if (data[longKey] !== undefined) return data[longKey]
-
-  return undefined
-}
-
-// Главная функция сборки данных формы
 const initForm = () => {
   Object.keys(formData).forEach(key => delete formData[key])
   const newBaseline: Record<string, any> = {}
 
   props.fields.forEach(field => {
-    const rawValue = getRawValue(field.key, props.data)
-
+    const rawValue = props.data[field.key]
     if (field.type === 'select') {
       let matchedValue: any = ''
 
       if (rawValue !== undefined && rawValue !== null) {
         const rawStr = String(rawValue).trim().toLowerCase()
-
-        // Маппим строковые энамы бэка в числа вашего фронтового конфига fields
-        if (rawStr === 'active') {
-          matchedValue = 1 // Переводим строку бэка в число 1 для селекта
-        } else if (rawStr === 'archived' || rawStr === 'archive') {
-          matchedValue = 2 // Переводим строку бэка в число 2 для селекта
-        } else {
-          // Если пришло нормальное число, ищем совпадение в опциях
-          const found = field.options?.find(opt => String(opt.value) === rawStr)
-          matchedValue = found ? found.value : rawValue
-        }
+        const found = field.options?.find(opt => String(opt.value).toLowerCase() === rawStr)
+        matchedValue = found ? found.value : rawValue
       }
 
       formData[field.key] = matchedValue
@@ -163,14 +116,12 @@ const initForm = () => {
   baselineData.value = newBaseline
 }
 
-// Срабатывает при физическом открытии модалки
 watch(() => props.show, (newVal) => {
   if (newVal) {
     initForm()
   }
 })
 
-// Срабатывает, если данные строки (props.data) долетели асинхронно чуть позже открытия
 watch(() => props.data, () => {
   if (props.show) {
     initForm()
@@ -179,8 +130,6 @@ watch(() => props.data, () => {
 
 const onSubmit = () => {
   if (!isChanged.value) return
-
-  // Отправляем наружу чистый formData, в котором лежат выбранные числа (1 или 2)
   emit('submit', { ...formData })
 }
 </script>
