@@ -29,15 +29,13 @@
         </SideBarNavItem>
 
         <SideBarNavItem v-if="authStore.userRole === 'admin'" to="/admin" :isCollapsed="isCollapsed">
-<!--            v-if="authStore.userRole === 1" to="/admin" :isCollapsed="isCollapsed"-->
-
           <template #icon>🛡️</template>
           Администрирование
         </SideBarNavItem>
       </nav>
 
       <div class="action-container">
-        <button class="create-btn" :class="{ 'btn-collapsed': isCollapsed }">
+        <button class="create-btn" v-if="authStore.userRole !== 'admin'"  :class="{ 'btn-collapsed': isCollapsed }">
           <span v-if="!isCollapsed">+ Создать задачу</span>
           <span v-else>+</span>
         </button>

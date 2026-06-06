@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
-import { useAuthStore } from '../../../stores/auth' // Твой стор авторизации
+import { useAuthStore } from '../../../stores/auth'
 
 import DataBaseTable from "../../../components/tables/DataBaseTable.vue";
 import AdminNavHeaderComponent from "../../../components/admin/AdminNavHeaderComponent.vue";
@@ -80,7 +80,6 @@ const projectOptions = ref([])
 const isLoading = ref(true)
 const selectedUser = ref(null)
 
-// Конфигурация колонок для таблицы
 const userColumns = [
   { key: 'id', label: 'ID' },
   { key: 'fullName', label: 'ФИО' },
@@ -89,14 +88,12 @@ const userColumns = [
   { key: 'project', label: 'Закрепленный проект' }
 ]
 
-// Кастомный маппинг данных перед выводом в таблицу
 const transformUser = (user) => ({
   ...user,
   role: user.role?.name || '—',
   project: user.project?.name || 'Все проекты'
 })
 
-// Загрузка пользователей и проектов
 const fetchEmployees = async () => {
   try {
     isLoading.value = true
@@ -124,13 +121,11 @@ onMounted(() => {
   fetchEmployees()
 })
 
-// Модальные окна
 const showCreateModal = ref(false)
 const showDeleteModal = ref(false)
 const showInspectModal = ref(false)
 const showEditModal = ref(false)
 
-// ДИНАМИЧЕСКИЕ ПОЛЯ ФОРМЫ (Используем computed, чтобы дождаться загрузки проектов)
 const userFormFields = computed(() => [
   { key: 'fullName', label: 'ФИО сотрудника', type: 'text', placeholder: 'Иванов Иван' },
   { key: 'email', label: 'Электронная почта', type: 'text', placeholder: 'example@tracker.com' },
@@ -160,7 +155,6 @@ const onDelete = async (user) => {
   showDeleteModal.value = true
 }
 
-// ОТПРАВКА ИНВАЙТА С РАЗДЕЛЕНИЕМ НА РУЧКИ
 const onCreate = async (formData) => {
   console.log(props.workspaceId)
   try {
@@ -188,7 +182,6 @@ const onCreate = async (formData) => {
       })
     }
 
-    // Показываем сгенерированный UUID пароль через alert, так как CreateModal закроется
     alert(`Пользователь успешно добавлен!\n\nEmail: ${response.data.email}\nВременный пароль: ${response.data.rawPassword}`)
 
     showCreateModal.value = false

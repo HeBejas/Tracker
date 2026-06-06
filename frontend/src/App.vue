@@ -28,14 +28,11 @@ import AppHeader from './components/layout/MainHeaderComponent.vue'
   height: 100vh;
 }
 
-/* Наш стандартный каркас для внутренних страниц */
 .app-layout {
   display: flex;
   height: 100vh;
   overflow: hidden;
 }
-
-
 
 .main-wrapper {
   flex-grow: 1;

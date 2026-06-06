@@ -8,20 +8,20 @@
     <div class="account-card">
       <div class="account-avatar">
         <div class="avatar-circle">
-          {{ userFullName.charAt(0).toUpperCase() || 'U' }}
+          {{ authStore.userRole.charAt(0).toUpperCase() || 'U' }}
         </div>
       </div>
 
       <div class="account-details">
-<!--        <div class="info-group">-->
-<!--          <span class="label">ФИО</span>-->
-<!--          <span class="value">{{ userFullName }}</span>-->
-<!--        </div>-->
+        <div class="info-group">
+          <span class="label">ФИО</span>
+          <span class="value">{{ userFullName }}</span>
+        </div>
 
-<!--        <div class="info-group">-->
-<!--          <span class="label">Email</span>-->
-<!--          <span class="value">{{ userEmail }}</span>-->
-<!--        </div>-->
+        <div class="info-group">
+          <span class="label">Email</span>
+          <span class="value">{{ userEmail }}</span>
+        </div>
 
         <div class="info-group">
           <span class="label">Уровень доступа</span>
@@ -47,18 +47,16 @@ import { useAuthStore } from '../stores/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-// ДОСТАЕМ ДАННЫЕ ИЗ ХРАНИЛИЩА
-// Если у тебя данные в сторе лежат иначе, например просто authStore.email, поправь здесь:
-const userFullName = computed(() => authStore.user?.fullName || 'Не указано')
-const userEmail = computed(() => authStore.user?.email || 'Не указано')
-const userRoleId = computed(() => authStore.user?.role?.id || authStore.user?.roleId || 3)
+authStore.userRole
+// const userFullName = computed(() => authStore.user?.fullName || 'Не указано')
+// const userEmail = computed(() => authStore.user?.email || 'Не указано')
 
 // Маппинг роли из числа в красивый текст
 const userRoleName = computed(() => {
-  switch (userRoleId.value) {
-    case 1: return 'Администратор'
-    case 2: return 'Менеджер'
-    case 3: return 'Пользователь'
+  switch (authStore.userRole ) {
+    case 'admin': return 'Администратор'
+    case 'manager': return 'Менеджер'
+    case 'employee': return 'Пользователь'
     default: return 'Неизвестно'
   }
 })
@@ -74,8 +72,6 @@ const handleLogout = () => {
     authStore.$reset()
     localStorage.removeItem('token')
   }
-
-  // Отправляем пользователя на страницу логина
   router.push('/login')
 }
 </script>

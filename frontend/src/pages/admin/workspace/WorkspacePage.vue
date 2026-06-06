@@ -28,18 +28,15 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-// Убедись, что путь до компонента правильный для твоей структуры папок
 import AdminNavHeaderComponent from '../../../components/admin/AdminNavHeaderComponent.vue'
 import AdminWrapper from "../../../components/admin/AdminWrapperComponent.vue";
 
 const route = useRoute()
 const router = useRouter()
 
-// Получаем ID из URL (например, из /admin/projects/123 достанет "123")
 const workspaceId = route.params.id
 console.log(workspaceId)
 
-// Формируем ссылки для хедера. Пути должны строго совпадать с твоим router.js!
 const projectLinks = computed(() => {
   return [
     `/admin/workspaces/${workspaceId}/dashboard`,
@@ -60,7 +57,6 @@ const goBack = () => {
   flex-direction: column;
 }
 
-/* Шапка проекта с красивым подчеркиванием */
 .header {
   display: flex;
   justify-content: space-between;
@@ -76,7 +72,6 @@ const goBack = () => {
   gap: 16px;
 }
 
-/* Облегченная кнопка "Назад" (выглядит как аккуратная ссылка) */
 .back-btn {
   display: flex;
   align-items: center;
@@ -103,10 +98,9 @@ const goBack = () => {
 }
 
 .back-btn:hover .arrow {
-  transform: translateX(-3px); /* Легкая анимация стрелочки при наведении */
+  transform: translateX(-3px);
 }
 
-/* Вертикальная черта между кнопкой "Назад" и заголовком */
 .divider {
   width: 1px;
   height: 32px;
@@ -135,7 +129,6 @@ const goBack = () => {
   font-weight: 600;
 }
 
-/* Контент занимает оставшееся место, двойные рамки удалены */
 .project-content {
   flex-grow: 1;
 }
