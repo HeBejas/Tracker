@@ -33,7 +33,7 @@
         @confirm="onDeleteConfirm"
     />
 
-    <UpdateModal
+    <EditModal
         :show="showEditModal"
         :title="`Изменить рабочую среду ${selectedWorkspace?.id} `"
         :fields="workspaceFormFields"
@@ -57,7 +57,7 @@ import AdminWrapperComponent from '../../components/admin/AdminWrapperComponent.
 import AdminHeaderComponent from '../../components/admin/AdminHeaderComponent.vue'
 import CreateModal from "../../components/modals/CreateModal.vue";
 import DeleteModal from "../../components/modals/DeleteModal.vue";
-import UpdateModal from "../../components/modals/UpdateModal.vue";
+import EditModal from "../../components/modals/EditModal.vue";
 
 const adminLinks = [
   '/admin/workspaces',
@@ -78,12 +78,6 @@ const transformWorkspace = (workspace) => ({
   createdAt: workspace.createdAt ? new Date(workspace.createdAt).toLocaleDateString('ru-RU') : '—'
 })
 
-// const projectColumns: TableColumn[] = [
-//   { key: 'id', label: 'ID' },
-//   { key: 'title', label: 'Название проекта' },
-//   { key: 'manager', label: 'Руководитель' },
-//   { key: 'status', label: 'Статус' }
-// ]
 const workspaceColumns = [
   { key: 'id', label: 'ID' },
   { key: 'tariff', label: 'Тариф' },
@@ -93,13 +87,13 @@ const workspaceColumns = [
 
 const workspaceFormFields = computed(() => [
   { key: 'tariff', label: 'Тариф', type: 'select',
-    options: tariffs.value.map(t => ({ value: t.id, label: t.name }))
+    options: tariffs.value.map(t => ({ value: t.name, label: t.name }))
   },
   { key: 'status', label: 'Статус', type: 'select',
     options: [
-      { value: 1, label: 'Активен' },
-      { value: 2, label: 'Приостановлен' },
-      { value: 3, label: 'Приостановлен за неуплату' }
+      { value: 'active', label: 'Активен' },
+      { value: 'suspended', label: 'Приостановлен' },
+      { value: 'suspended_nonpayment', label: 'Приостановлен за неуплату' }
     ]
   }
 ])

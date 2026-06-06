@@ -38,7 +38,7 @@
         @confirm="onDeleteConfirm"
     />
 
-    <UpdateModal
+    <EditModal
         :show="showEditModal"
         :title="`Изменить данные «${selectedUser?.fullName}»`"
         :fields="userFormFields"
@@ -62,7 +62,7 @@ import AdminWrapperComponent from "../../../components/admin/AdminWrapperCompone
 import CreateModal from "../../../components/modals/CreateModal.vue";
 import DeleteModal from "../../../components/modals/DeleteModal.vue"
 import InspectModal from "../../../components/modals/InspectModal.vue";
-import UpdateModal from "../../../components/modals/UpdateModal.vue";
+import EditModal from "../../../components/modals/EditModal.vue";
 
 const authStore = useAuthStore()
 const adminLinks = [

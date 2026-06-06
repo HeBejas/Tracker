@@ -1,0 +1,8 @@
+POST http://localhost:8080/api/auth/invite/admin
+Content-Type: application/json
+
+{
+  "email": "admin",
+  "password": "admin",
+  "fullName": "Админ Админович"
+}

@@ -19,8 +19,8 @@
     <InspectModal
         :show="showInspectModal"
         title="Просмотр профиля сотрудника"
-        :data="selectedUser"
         :fields="userColumns" @close="showInspectModal = false"
+        :data="selectedUser"
     />
     <CreateModal
         :show="showCreateModal"
@@ -39,7 +39,7 @@
         @confirm="onDeleteConfirm"
     />
 
-    <UpdateModal
+    <EditModal
         :show="showEditModal"
         :title="`Изменить «${selectedUser?.fullName}»`"
         :fields="userFormFields"
@@ -63,7 +63,7 @@ import AdminWrapperComponent from '../../components/admin/AdminWrapperComponent.
 import AdminHeaderComponent from "../../components/admin/AdminHeaderComponent.vue";
 import DeleteModal from "../../components/modals/DeleteModal.vue";
 import CreateModal from "../../components/modals/CreateModal.vue";
-import UpdateModal from "../../components/modals/UpdateModal.vue";
+import EditModal from "../../components/modals/EditModal.vue";
 
 const adminLinks = [
   '/admin/workspaces',
@@ -170,9 +170,9 @@ const userFormFields = [
     label: 'Роль',
     type: 'select',
     options: [
-      { value: 1, label: 'Администратор' },
-      { value: 2, label: 'Менеджер' },
-      { value: 3, label: 'Пользователь' }
+      { value: 'admin', label: 'Администратор' },
+      { value: 'manager', label: 'Менеджер' },
+      { value: 'employee', label: 'Сотрудник' }
     ]
   },
   {
@@ -180,8 +180,8 @@ const userFormFields = [
     label: 'Статус',
     type: 'select',
     options: [
-      { value: 1, label: 'Активен' },
-      { value: 2, label: 'Заблокирован' }
+      { value: 'active', label: 'Активен' },
+      { value: 'disabled', label: 'Заблокирован' }
     ]
   }
 ]
