@@ -18,7 +18,7 @@ public class AuthController {
     public record EmployeeInviteRequest(String email, String fullName, Integer workspaceId) {}
     public record ManagerInviteRequest(String email, String fullName, Integer workspaceId) {}
     public record AdminInviteRequest(String email, String fullName, String password) {}
-
+    public record ChangePasswordRequest(String oldPassword, String newPassword) {}
 //    public record EmployeeInviteRequest(String email, String fullName, Integer workspaceId, Integer projectId, Long inviterId) {}
 
     public record AuthRequest(String email, String password) {}
@@ -62,4 +62,15 @@ public class AuthController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PutMapping("/change-password/{userId}")
+    public ResponseEntity<?> changePassword(@PathVariable Long userId, @RequestBody ChangePasswordRequest request){
+        try {
+            authService.changePassword(userId, request.oldPassword(), request.newPassword());
+            return ResponseEntity.ok("Пароль успешно изменён");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

@@ -45,13 +45,13 @@ const dbConnectionError = ref('')
 const handleLogin = async () => {
   errorMessage.value = ''
   try {
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
+    const response = await axios.post('/api/auth/login', {
       email: email.value,
       password: password.value
     })
-    const userRole = response.data
+    const data = response.data
     const token = 'fake-token-for-dev'
-    authStore.login(token, userRole)
+    authStore.login(token, data.userId, data.role, data.fullName, data.email)
     router.push('/home')
   } catch (error) {
     alert("Неверный email или пароль")

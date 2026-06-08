@@ -16,7 +16,6 @@
         @delete="onDelete"
     />
 
-
     <InspectModal
         :show="showInspectModal"
         :title="`Просмотр тарифа «${selectedTariff?.name}»`"
@@ -74,10 +73,12 @@ const adminLinks = [
   '/admin/tariffs'
 ]
 
-const tariffs = ref([])
+const selectedTariff = ref<any>(null)
+const tariffs = ref<any[]>([])
+
 const isLoading = ref(true)
 
-const transformTariff = (tariff) => ({
+const transformTariff = (tariff: any) => ({
   ...tariff,
   status: tariff.status?.name || '—'
 })
@@ -85,7 +86,7 @@ const transformTariff = (tariff) => ({
 const fetchTariffs = async () => {
   try {
     isLoading.value = true
-    const response = await axios.get('http://localhost:8080/api/tariffs')
+    const response = await axios.get('/api/tariffs')
     tariffs.value = response.data.map(transformTariff) // response.data . Вызов transformTariff для каждого элемента
   } catch (error) {
     console.error('Ошибка при загрузке списка:', error)
@@ -98,7 +99,7 @@ onMounted(() => {
   fetchTariffs()
 })
 
-const tariffColumns = [
+const tariffColumns: any= [
   { key: 'id', label: 'ID' },
   { key: 'name', label: 'Название' },
   { key: 'maxProjects', label: 'Лимит проектов' },
@@ -113,9 +114,7 @@ const showDeleteModal = ref(false)
 const showInspectModal = ref(false)
 const showEditModal = ref(false)
 
-const selectedTariff = ref(null)
-
-const tariffFormFields = [
+const tariffFormFields: any = [
   { key: 'name', label: 'Название', type: 'text', placeholder: 'Введите название' },
   { key: 'maxProjects', label: 'Лимит проектов', type: 'number' },
   { key: 'maxUsers', label: 'Лимит пользователей', type: 'number' },
@@ -131,41 +130,41 @@ const tariffFormFields = [
   }
 ]
 
-const onInspect= async (tariff) => {
+const onInspect= async (tariff: any) => {
   showInspectModal.value = true
   selectedTariff.value = tariff
 }
 
-const onCreate = async (data) => {
+const onCreate = async (data: any) => {
   console.log('Создаём тариф:', data)
-  const response = await axios.post('http://localhost:8080/api/tariffs', data)
+  const response = await axios.post('/api/tariffs', data)
   tariffs.value.push(transformTariff(response.data))
   showCreateModal.value = false
 }
 
-const onDelete = async (tariff) => {
+const onDelete = async (tariff: any) => {
   showDeleteModal.value = true
   selectedTariff.value = tariff
 }
 
-const onEdit = (tariff) => {
+const onEdit = (tariff: any) => {
   selectedTariff.value = tariff
   showEditModal.value = true
 }
 
 const onDeleteConfirm = async () => {
   try {
-    await axios.delete(`http://localhost:8080/api/tariffs/${selectedTariff.value.id}`)
+    await axios.delete(`/api/tariffs/${selectedTariff.value.id}`)
     tariffs.value = tariffs.value.filter(t => t.id !== selectedTariff.value.id)
     showDeleteModal.value = false
   } catch (error) {
-    alert('Ошибка при удалении:', error)
+    alert(`Ошибка при удалении: ${error}`)
   }
 }
 
-const onUpdate = async (data) => {
+const onUpdate = async (data: any) => {
   try {
-    const response = await axios.put(`http://localhost:8080/api/tariffs/${selectedTariff.value.id}`, data)
+    const response = await axios.put(`/api/tariffs/${selectedTariff.value.id}`, data)
     // Обновляем в списке
     const index = tariffs.value.findIndex(t => t.id === selectedTariff.value.id)
     if (index !== -1) {

@@ -24,6 +24,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public record InviteResponse(String email, String rawPassword, String message) {}
+    public record LoginResponse(Long userId, String role, String fullName, String email) {}
 
     public InviteResponse inviteEmployee(String email, String fullName, Integer workspaceId) {
         if (userRepository.existsByEmail(email)) { throw new RuntimeException("Email уже занят"); }
@@ -76,11 +77,27 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public String login(String email, String password) {
+    public LoginResponse  login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .filter(u -> passwordEncoder.matches(password, u.getPasswordHash()))
                 .orElseThrow(() -> new RuntimeException("Неверный email или пароль"));
-        return user.getRole().getName();
+        return new LoginResponse(
+                user.getId(),
+                user.getRole().getName(),
+                user.getFullName(),
+                user.getEmail()
+        );
+    }
+
+    public void changePassword(Long userId, String oldPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
+            throw new RuntimeException("Неверный пароль");
+        }
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
 }

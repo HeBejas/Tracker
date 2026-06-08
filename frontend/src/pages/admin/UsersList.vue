@@ -71,17 +71,17 @@ const adminLinks = [
   '/admin/tariffs'
 ]
 
-const transformUser = (user) => ({
+const transformUser = (user: any) => ({
   ...user,
   role: user.role?.name || '—',
   status: user.status?.name || '—'
 })
 
 // 2. Состояние страницы
-const users = ref([])
+const users = ref<any[]>([])
+const selectedUser = ref<any>(null)
+
 const isLoading = ref(true)
-
-
 
 // 3. Настраиваем колонки. 'key' должен строго совпадать с названиями полей в Java
 const userColumns: TableColumn[] = [
@@ -96,7 +96,7 @@ const userColumns: TableColumn[] = [
 const fetchUsers = async () => {
   try {
     isLoading.value = true
-    const response = await axios.get('http://localhost:8080/api/users')
+    const response = await axios.get('/api/users')
     users.value = response.data.map(transformUser)
   } catch (error) {
     console.error('Ошибка при загрузке списка пользователей:', error)
@@ -110,43 +110,41 @@ const showDeleteModal = ref(false)
 const showInspectModal = ref(false)
 const showEditModal = ref(false)
 
-const selectedUser = ref<User | null>(null)
-
-const onInspect = (user) => {
+const onInspect = (user: any) => {
   selectedUser.value = user
   showInspectModal.value = true
 }
 
-const onEdit = (user) => {
+const onEdit = (user: any) => {
   selectedUser.value = user
   showEditModal.value = true
 }
 
-const onCreate = async (data) => {
+const onCreate = async (data: any) => {
   console.log('Создаём пользователя:', data)
-  // const response = await axios.post('http://localhost:8080/api/tariffs', data)
+  // const response = await axios.post('/api/tariffs', data)
   // tariffs.value.push(transformTariff(response.data))
   showCreateModal.value = false
 }
 
-const onDelete = async (tariff) => {
+const onDelete = async (user: any) => {
   showDeleteModal.value = true
-  selectedUser.value = tariff
+  selectedUser.value = user
 }
 
 const onDeleteConfirm = async () => {
   try {
-    // await axios.delete(`http://localhost:8080/api/tariffs/${selectedTariff.value.id}`)
+    // await axios.delete(`/api/tariffs/${selectedTariff.value.id}`)
     // tariffs.value = tariffs.value.filter(t => t.id !== selectedTariff.value.id)
     showDeleteModal.value = false
   } catch (error) {
-    alert('Ошибка при удалении:', error)
+    alert(`Ошибка при удалении: ${error}`)
   }
 }
 
-const onUpdate = async (data) => {
+const onUpdate = async (data: any) => {
   try {
-    // const response = await axios.put(`http://localhost:8080/api/tariffs/${selectedTariff.value.id}`, data)
+    // const response = await axios.put(`/api/tariffs/${selectedTariff.value.id}`, data)
     // const index = tariffs.value.findIndex(t => t.id === selectedTariff.value.id)
     // if (index !== -1) {
     //   tariffs.value[index] = transformTariff(response.data)
@@ -161,7 +159,7 @@ onMounted(() => {
   fetchUsers()
 })
 
-const userFormFields = [
+const userFormFields: any = [
   { key: 'email', label: 'Email', type: 'text', placeholder: 'Введите email' },
   { key: 'fullName', label: 'ФИО', type: 'text', placeholder: 'Введите полное имя' },
   // { key: 'workspaceId', label: 'ID Пространства', type: 'number' },

@@ -68,24 +68,26 @@ const adminLinks = [
 const router = useRouter()
 const isLoading = ref(true)
 
-const workspaces = ref([])
-const tariffs = ref([])
+const workspaces = ref<any[]>([])
+const selectedWorkspace = ref<any>(null)
 
-const transformWorkspace = (workspace) => ({
+const tariffs = ref<any[]>([])
+
+const transformWorkspace = (workspace: any ) => ({
   ...workspace,
   tariff: workspace.tariff?.name || '—',
   status: workspace.status?.name || '—',
   createdAt: workspace.createdAt ? new Date(workspace.createdAt).toLocaleDateString('ru-RU') : '—'
 })
 
-const workspaceColumns = [
+const workspaceColumns: any = [
   { key: 'id', label: 'ID' },
   { key: 'tariff', label: 'Тариф' },
   { key: 'status', label: 'Статус' },
   { key: 'createdAt', label: 'Создан' }
 ]
 
-const workspaceFormFields = computed(() => [
+const workspaceFormFields: any = computed(() => [
   { key: 'tariff', label: 'Тариф', type: 'select',
     options: tariffs.value.map(t => ({ value: t.name, label: t.name }))
   },
@@ -99,14 +101,14 @@ const workspaceFormFields = computed(() => [
 ])
 
 
-const goToWorkspace = (workspace: number) => {
+const goToWorkspace = (workspace: any) => {
   router.push(`/admin/workspaces/${workspace.id}`)
 }
 
 const fetchWorkspaces = async () => {
   try {
     isLoading.value = true
-    const response = await axios.get('http://localhost:8080/api/workspaces')
+    const response = await axios.get('/api/workspaces')
     workspaces.value = response.data.map(transformWorkspace)
   } catch (error) {
     console.error('Ошибка при загрузке списка:', error)
@@ -117,7 +119,7 @@ const fetchWorkspaces = async () => {
 
 const fetchTariffs = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/tariffs')
+    const response = await axios.get('/api/tariffs')
     tariffs.value = response.data
   } catch (error) {
     console.error('Ошибка при загрузке тарифов:', error)
@@ -133,38 +135,35 @@ const showCreateModal = ref(false)
 const showDeleteModal = ref(false)
 const showEditModal = ref(false)
 
-const selectedWorkspace = ref(null)
-
-
-const onCreate = async (data) => {
-  const response = await axios.post('http://localhost:8080/api/workspaces', data)
+const onCreate = async (data: any) => {
+  const response = await axios.post('/api/workspaces', data)
   workspaces.value.push(transformWorkspace(response.data))
   showCreateModal.value = false
 }
 
-const onDelete = async (workspace) => {
+const onDelete = async (workspace: any) => {
   showDeleteModal.value = true
   selectedWorkspace.value = workspace
 }
 
 const onDeleteConfirm = async () => {
   try {
-    await axios.delete(`http://localhost:8080/api/workspaces/${selectedWorkspace.value.id}`)
+    await axios.delete(`/api/workspaces/${selectedWorkspace.value.id}`)
     workspaces.value = workspaces.value.filter(w => w.id !== selectedWorkspace.value.id)
     showDeleteModal.value = false
   } catch (error) {
-    alert('Ошибка при удалении:', error)
+    alert(`Ошибка при удалении: ${error}`)
   }
 }
 
-const onEdit = (workspace) => {
+const onEdit = (workspace: any) => {
   selectedWorkspace.value = workspace
   showEditModal.value = true
 }
 
-const onUpdate = async (data) => {
+const onUpdate = async (data: any) => {
   try {
-    const response = await axios.put(`http://localhost:8080/api/workspaces/${selectedWorkspace.value.id}`, data)
+    const response = await axios.put(`/api/workspaces/${selectedWorkspace.value.id}`, data)
     const index = workspaces.value.findIndex(w => w.id === selectedWorkspace.value.id)
     if (index !== -1) {
       workspaces.value[index] = transformWorkspace(response.data)

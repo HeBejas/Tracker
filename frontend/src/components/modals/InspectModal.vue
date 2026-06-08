@@ -101,6 +101,4 @@ defineEmits(['close'])
   font-weight: 400;
 }
 
-/* Кнопки и футер */
-
 </style>

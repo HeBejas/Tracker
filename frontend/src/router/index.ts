@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouterView } from 'vue-router'
 import DashboardPage from '../pages/DashboardPage.vue'
 import { useAuthStore } from '../stores/auth'
+import type { RouteLocationNormalized, RouteLocation } from 'vue-router'
 
 const routes = [
   { path: '/', redirect: '/login', meta: { HideLayout: true }},
@@ -31,11 +32,11 @@ const routes = [
             path: ':id',
             name: 'WorkspacePage',
             component: () => import('../pages/admin/workspace/WorkspacePage.vue'),
-            meta: { breadcrumb: (route) => `Рабочая среда №${route.params.id}` },
+            meta: { breadcrumb: (route: RouteLocationNormalized) => `Рабочая среда №${route.params.id}` },
             children: [
               {
                 path: '',
-                redirect: to => `/admin/workspaces/${to.params.id}/dashboard`,
+                redirect: (to: RouteLocation) => `/admin/workspaces/${to.params.id}/dashboard`,
 
               },
               {

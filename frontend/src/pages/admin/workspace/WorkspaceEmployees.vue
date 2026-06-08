@@ -75,12 +75,14 @@ const props = defineProps<{
   workspaceId: number
 }>()
 
-const users = ref([])
-const projectOptions = ref([])
-const isLoading = ref(true)
-const selectedUser = ref(null)
+const users = ref<any[]>([])
+const selectedUser = ref<any>(null)
 
-const userColumns = [
+const projectOptions = ref<any[]>([])
+const isLoading = ref(true)
+
+
+const userColumns: any = [
   { key: 'id', label: 'ID' },
   { key: 'fullName', label: 'ФИО' },
   { key: 'email', label: 'Email' },
@@ -88,7 +90,7 @@ const userColumns = [
   { key: 'project', label: 'Закрепленный проект' }
 ]
 
-const transformUser = (user) => ({
+const transformUser = (user: any ) => ({
   ...user,
   role: user.role?.name || '—',
   project: user.project?.name || 'Все проекты'
@@ -98,14 +100,14 @@ const fetchEmployees = async () => {
   try {
     isLoading.value = true
 
-    const usersResponse = await axios.get(`http://localhost:8080/api/workspaces/${props.workspaceId}/users`)
+    const usersResponse = await axios.get(`/api/workspaces/${props.workspaceId}/users`)
     const userData = usersResponse.data
 
     users.value = Array.isArray(userData)
         ? userData.map(transformUser)
         : [transformUser(userData)]
 
-    const projectsResponse = await axios.get(`http://localhost:8080/api/workspaces/${props.workspaceId}/projects`)
+    const projectsResponse = await axios.get(`/api/workspaces/${props.workspaceId}/projects`)
     projectOptions.value = projectsResponse.data.map((p: any) => ({
       value: p.id,
       label: p.name
@@ -126,7 +128,7 @@ const showDeleteModal = ref(false)
 const showInspectModal = ref(false)
 const showEditModal = ref(false)
 
-const userFormFields = computed(() => [
+const userFormFields: any = computed(() => [
   { key: 'fullName', label: 'ФИО сотрудника', type: 'text', placeholder: 'Иванов Иван' },
   { key: 'email', label: 'Электронная почта', type: 'text', placeholder: 'example@tracker.com' },
   {
@@ -140,22 +142,22 @@ const userFormFields = computed(() => [
   }
 ])
 
-const onInspect = async (user) => {
+const onInspect = async (user: any ) => {
   selectedUser.value = user
   showInspectModal.value = true
 }
 
-const onEdit = (user) => {
+const onEdit = (user: any ) => {
   selectedUser.value = user
   showEditModal.value = true
 }
 
-const onDelete = async (user) => {
+const onDelete = async (user: any ) => {
   selectedUser.value = user
   showDeleteModal.value = true
 }
 
-const onCreate = async (formData) => {
+const onCreate = async (formData: any ) => {
   console.log(props.workspaceId)
   try {
     let response
@@ -168,7 +170,7 @@ const onCreate = async (formData) => {
     }
 
     if (formData.roleId === 2) {
-      response = await axios.post('http://localhost:8080/api/auth/invite/manager', basePayload)
+      response = await axios.post('/api/auth/invite/manager', basePayload)
     } else {
       // Проверяем, выбрал ли админ проект для работяги
       // if (!formData.projectId) {
@@ -176,7 +178,7 @@ const onCreate = async (formData) => {
       //   return
       // }
       // Стучимся на ручку Сотрудника
-      response = await axios.post('http://localhost:8080/api/auth/invite/employee', {
+      response = await axios.post('/api/auth/invite/employee', {
         ...basePayload,
         projectId: formData.projectId
       })
@@ -193,7 +195,7 @@ const onCreate = async (formData) => {
 
 const onDeleteConfirm = async () => {
   try {
-    await axios.delete(`http://localhost:8080/api/users/${selectedUser.value.id}`)
+    await axios.delete(`/api/users/${selectedUser.value.id}`)
     users.value = users.value.filter(u => u.id !== selectedUser.value.id)
     showDeleteModal.value = false
   } catch (error) {
@@ -201,9 +203,9 @@ const onDeleteConfirm = async () => {
   }
 }
 
-const onUpdate = async (data) => {
+const onUpdate = async (data: any ) => {
   try {
-    const response = await axios.put(`http://localhost:8080/api/users/${selectedUser.value.id}`, data)
+    const response = await axios.put(`/api/users/${selectedUser.value.id}`, data)
     const index = users.value.findIndex(u => u.id === selectedUser.value.id)
     if (index !== -1) {
       users.value[index] = transformUser(response.data)

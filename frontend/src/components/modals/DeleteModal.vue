@@ -37,26 +37,4 @@ defineEmits<{
 .delete-message {
   color: #475569; font-size: 0.95rem; margin: 0;
 }
-
-.modal-actions {
-  display: flex; justify-content: flex-end; gap: 12px;
-}
-
-.mt-4 { margin-top: 8px; }
-
-.action-btn {
-  padding: 8px 16px; border-radius: 6px; font-weight: 500; cursor: pointer; border: none;
-}
-
-.action-btn.secondary {
-  background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;
-}
-
-.action-btn.danger {
-  background: #ef4444; color: white;
-}
-
-.action-btn.danger:hover {
-  background: #dc2626;
-}
 </style>

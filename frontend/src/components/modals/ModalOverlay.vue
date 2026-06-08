@@ -13,9 +13,6 @@
 
       <div class="modal-footer">
         <slot name="footer" />
-<!--        <button class="action-btn secondary" @click="$emit('close')">-->
-<!--          Закрыть-->
-<!--        </button>-->
       </div>
 
     </div>

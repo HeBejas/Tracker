@@ -8,19 +8,19 @@
     <div class="account-card">
       <div class="account-avatar">
         <div class="avatar-circle">
-          {{ authStore.userRole.charAt(0).toUpperCase() || 'U' }}
+          {{ authStore.userRole?.charAt(0).toUpperCase() || 'U' }}
         </div>
       </div>
 
       <div class="account-details">
         <div class="info-group">
           <span class="label">ФИО</span>
-          <span class="value">{{ userFullName }}</span>
+          <span class="value">{{  authStore.fullName}}</span>
         </div>
 
         <div class="info-group">
           <span class="label">Email</span>
-          <span class="value">{{ userEmail }}</span>
+          <span class="value">{{ authStore.email }}</span>
         </div>
 
         <div class="info-group">
@@ -30,6 +30,7 @@
       </div>
 
       <div class="account-actions">
+        <ChangePasswordBtn/>
         <button class="logout-btn" @click="handleLogout">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           Выйти из аккаунта
@@ -43,7 +44,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-
+import ChangePasswordBtn from '../components/buttons/ChangePasswordBtn.vue'
 const router = useRouter()
 const authStore = useAuthStore()
 
@@ -77,6 +78,38 @@ const handleLogout = () => {
 </script>
 
 <style scoped>
+/* Найди этот класс в самом низу своего файла и замени на этот код: */
+.account-actions {
+  width: 100%;
+  display: flex;
+  gap: 12px; /* Расстояние между кнопками */
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Сделаем так, чтобы обе кнопки одинаково растягивались и были одной высоты */
+.account-actions > * {
+  flex: 1;
+  height: 42px;
+  justify-content: center;
+}
+
+/* Твоя кнопка выхода (просто чутка подправил высоту для идеального выравнивания) */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
 .account-page-wrapper {
   max-width: 600px;
   margin: 40px auto;
