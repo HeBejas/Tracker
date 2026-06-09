@@ -52,9 +52,8 @@
 
   const route = useRoute()
   const breadcrumbs = computed(() => {
-    // route.matched содержит массив всех родительских путей для текущей страницы
     return route.matched
-      .filter(item => item.meta && item.meta.breadcrumb) // Берем только те, у которых прописан breadcrumb
+      .filter(item => item.meta && item.meta.breadcrumb)
       .map(item => {
         const label = typeof item.meta.breadcrumb === 'function'
             ? item.meta.breadcrumb(route)

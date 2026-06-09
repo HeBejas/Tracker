@@ -8,15 +8,14 @@ const routes = [
   { path: '/login', name: 'Login', component: () => import('../pages/LoginPage.vue'), meta: { HideLayout: true, requiresAuth: false }},
   { path: '/profile', name: 'Profile', component: () => import('../pages/ProfilePage.vue'), meta: { breadcrumb: 'Мой профиль', requiresAuth: true }},
   // { path: '/home', name: 'Home', component: () => import('../pages/HomePage.vue'), meta: { breadcrumb: 'Главная', requiresAuth: true  }},
-
   {
     path: '/workspaces/:id',
-    name: 'WorkspacePage',
-    component: () => import('../pages/workspace/WorkspacePage.vue'),
-    meta: { breadcrumb: (route: RouteLocationNormalized) => `Рабочая среда №${route.params.id}`, requiresAuth: true },
+    component: () => import('../pages/workspace/WorkspaceLayout.vue'),
+    meta: { /* breadcrumb: (route: RouteLocationNormalized) => `Рабочая среда №${route.params.id}`, */ requiresAuth: true },
     children: [
       {
         path: '',
+        name: 'WorkspaceDashboard',
         redirect: (to: RouteLocation) => `/workspaces/${to.params.id}/dashboard`,
       },
       {
@@ -25,23 +24,9 @@ const routes = [
         component: () => import('../pages/workspace/DashboardPage.vue'),
         meta: { breadcrumb: 'Дашборд' }
       },
-      {
-        path: 'projects',
-        children: [
-          {
-            path: '',
-            name: 'ProjectsList',
-            component: () => import('../pages/workspace/ProjectsList.vue'),
-            meta: { breadcrumb: 'Проекты' }
-          },
-          {
-            path: ':projectId/tasks',
-            name: 'ProjectTasks',
-            component: () => import('../pages/workspace/project/ProjectTasksList.vue'),
-            meta: { breadcrumb: 'Задачи проекта' }
-          }
-        ]
-      },
+      { path: 'projects', name: 'ProjectsList', component: () => import('../pages/workspace/ProjectsList.vue'), meta: { breadcrumb: 'Проекты' }},
+      { path: 'projects/:projectId/tasks', name: 'ProjectTasks', component: () => import('../pages/workspace/project/ProjectTasksList.vue'), meta: { breadcrumb: 'Задачи проекта' }},
+
       { path: 'employees', name: 'EmployeesList', component: () => import('../pages/workspace/EmployeesList.vue'), meta: { breadcrumb: 'Сотрудники' }},
       { path: 'reports', name: 'ReportsList', component: () => import('../pages/workspace/ReportsList.vue'), meta: { breadcrumb: 'Отчеты' }},
       { path: 'settings', name: 'WorkspaceSettings', component: () => import('../pages/workspace/WorkspaceSettings.vue'), meta: { breadcrumb: 'Настройки' }}
@@ -49,12 +34,12 @@ const routes = [
   },
   {
     path: '/admin',
-    name: 'Admin',
     component: () => import('../pages/admin/AdminPanelPage.vue'),
     meta: { breadcrumb: 'Администрирование', requiresAuth: true  },
     children: [
       {
         path: '',
+        name: 'Admin',
         redirect: '/admin/workspaces'
       },
       {
@@ -70,7 +55,7 @@ const routes = [
           {
             path: ':id',
             name: 'WorkspacePage',
-            component: () => import('../pages/workspace/WorkspacePage.vue'),
+            component: () => import('../pages/admin/WorkspacePage.vue'),
             meta: { breadcrumb: (route: RouteLocationNormalized) => `Рабочая среда №${route.params.id}` },
             children: [
               {
@@ -86,13 +71,13 @@ const routes = [
               },
               {
                 path: 'projects',
-                name: 'ProjectsList',
+                name: 'AdminProjectsList',
                 component: () => import('../pages/workspace/ProjectsList.vue'),
                 meta: { breadcrumb: 'Проекты' }
               },
               {
                 path: 'employees',
-                name: 'EmployeesList',
+                name: 'AdminEmployeesList',
                 component: () => import('../pages/workspace/EmployeesList.vue'),
                 meta: { breadcrumb: 'Сотрудники' }
               },

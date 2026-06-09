@@ -116,8 +116,7 @@ const menuItems = computed(() => {
     { to: `/workspaces/${workspaceId.value}/dashboard`, label: 'Дашборд', icon: '📋' },
     { to: `/workspaces/${workspaceId.value}/projects`, label: 'Проекты', icon: '📁' },
     { to: `/workspaces/${workspaceId.value}/employees`, label: 'Сотрудники', icon: '👥' },
-    { to: `/workspaces/${workspaceId.value}/reports`, label: 'Отчеты', icon: '📊' },
-    { to: `/workspaces/${workspaceId.value}/settings`, label: 'Настройки', icon: '⚙️' }
+    { to: `/workspaces/${workspaceId.value}/reports`, label: 'Отчеты', icon: '📊' }
   ]
 })
 
@@ -128,7 +127,7 @@ const toggleSettingsPanel = () => {
 }
 
 onMounted(() =>{
-  console.log( authStore.userRole)
+  // console.log( authStore.userRole)
 })
 </script>
 
@@ -243,45 +242,3 @@ onMounted(() =>{
   background-color: #eef2ff;
 }
 </style>
-
-<!--<script setup lang="ts">-->
-<!--</script>-->
-<!--<template>-->
-<!--  <aside>-->
-<!--    <div class="logo">MyTracker</div>-->
-<!--    <nav>-->
-<!--      <router-link to="/tasks">Задачи</router-link>-->
-<!--      <router-link to="/">Проекты</router-link>-->
-<!--      <router-link to="/">История</router-link>-->
-<!--      <router-link to="/">Добавить пользователя</router-link>-->
-<!--      <router-link to="/">Администрирование</router-link>-->
-
-
-<!--    </nav>-->
-<!--    Тут снизу меню-->
-<!--    <router-link to="/">Уведомления</router-link>-->
-<!--    <router-link to="/">Настройки</router-link>-->
-<!--    <router-link to="/">Учетная запись</router-link>-->
-<!--    Тут кнопка которая ужимает и расширяет меню со стреклой которая меняется в зависимости от состояния меню-->
-<!--  </aside>-->
-<!--</template>-->
-
-<!--<style scoped>-->
-<!--nav {-->
-<!--  display: flex;-->
-<!--  flex-direction: column;-->
-<!--  gap: 10px;-->
-<!--  padding: 20px;-->
-<!--}-->
-
-<!--nav a {-->
-<!--  color: white;-->
-<!--  text-decoration: none;-->
-<!--}-->
-
-<!--/* Vue автоматически вешает этот класс на активную ссылку */-->
-<!--nav a.router-link-active {-->
-<!--  font-weight: bold;-->
-<!--  color: #42b983;-->
-<!--}-->
-<!--</style>-->

@@ -144,3 +144,17 @@ body {
 select.form-input {
     cursor: pointer;
 }
+
+/*.frame-content,*/
+/*.projects-table-wrapper,*/
+/*.table-container,*/
+/*.table-wrapper,*/
+/*[class*="table"] {*/
+/*    overflow-x: auto !important;*/
+/*    min-width: 0 !important;*/
+/*    width: 100% !important;*/
+/*}*/
+
+/*.data-table {*/
+/*    min-width: 600px !important; !* или больше, если колонок много *!*/
+/*}*/
