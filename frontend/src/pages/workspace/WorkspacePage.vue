@@ -28,8 +28,8 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import AdminNavHeaderComponent from '../../../components/admin/AdminNavHeaderComponent.vue'
-import AdminWrapper from "../../../components/admin/AdminWrapperComponent.vue";
+import AdminNavHeaderComponent from '../../components/admin/AdminNavHeaderComponent.vue'
+import AdminWrapper from "../../components/admin/AdminWrapperComponent.vue";
 
 const route = useRoute()
 const router = useRouter()

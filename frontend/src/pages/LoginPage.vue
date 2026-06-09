@@ -22,25 +22,17 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { useRouter } from 'vue-router' // 1. Импортируй useRouter
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
-const router = useRouter() // 2. Инициализируй роутер
+const router = useRouter()
 const authStore = useAuthStore()
 
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 
-// Переменные для проверки связи с БД
 const dbConnectionError = ref('')
-
-// Функция, которая идет на бэкенд за ролями
-
-// Запускаем проверку автоматически, как только страница откроется в браузере
-// onMounted(() => {
-//   fetchRolesFromDb()
-// })
 
 const handleLogin = async () => {
   errorMessage.value = ''
@@ -51,9 +43,14 @@ const handleLogin = async () => {
     })
     const data = response.data
     const token = 'fake-token-for-dev'
-    authStore.login(token, data.userId, data.role, data.fullName, data.email)
-    router.push('/home')
+    authStore.login(token, data.userId, data.role, data.fullName, data.email, data.workspaceId || null)
+    if (authStore.userRoleId === 1) {
+      router.push('/admin/workspaces')
+    } else {
+      router.push(`/workspaces/${data.workspaceId}/dashboard`)
+    }
   } catch (error) {
+    console.error("Ошибка при входе:", error)
     alert("Неверный email или пароль")
   }
 }

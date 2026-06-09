@@ -52,17 +52,17 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
-import { useAuthStore } from '../../../stores/auth'
+import { useAuthStore } from '../../stores/auth'
 
-import DataBaseTable from "../../../components/tables/DataBaseTable.vue";
-import AdminNavHeaderComponent from "../../../components/admin/AdminNavHeaderComponent.vue";
-import AdminHeaderComponent from "../../../components/admin/AdminHeaderComponent.vue";
-import AdminWrapperComponent from "../../../components/admin/AdminWrapperComponent.vue";
+import DataBaseTable from "../../components/tables/DataBaseTable.vue";
+import AdminNavHeaderComponent from "../../components/admin/AdminNavHeaderComponent.vue";
+import AdminHeaderComponent from "../../components/admin/AdminHeaderComponent.vue";
+import AdminWrapperComponent from "../../components/admin/AdminWrapperComponent.vue";
 
-import CreateModal from "../../../components/modals/CreateModal.vue";
-import DeleteModal from "../../../components/modals/DeleteModal.vue"
-import InspectModal from "../../../components/modals/InspectModal.vue";
-import EditModal from "../../../components/modals/EditModal.vue";
+import CreateModal from "../../components/modals/CreateModal.vue";
+import DeleteModal from "../../components/modals/DeleteModal.vue"
+import InspectModal from "../../components/modals/InspectModal.vue";
+import EditModal from "../../components/modals/EditModal.vue";
 
 const authStore = useAuthStore()
 const adminLinks = [

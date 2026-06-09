@@ -6,8 +6,47 @@ import type { RouteLocationNormalized, RouteLocation } from 'vue-router'
 const routes = [
   { path: '/', redirect: '/login', meta: { HideLayout: true }},
   { path: '/login', name: 'Login', component: () => import('../pages/LoginPage.vue'), meta: { HideLayout: true, requiresAuth: false }},
-  { path: '/home', name: 'Home', component: () => import('../pages/HomePage.vue'), meta: { breadcrumb: 'Главная', requiresAuth: true  }},
   { path: '/profile', name: 'Profile', component: () => import('../pages/ProfilePage.vue'), meta: { breadcrumb: 'Мой профиль', requiresAuth: true }},
+  // { path: '/home', name: 'Home', component: () => import('../pages/HomePage.vue'), meta: { breadcrumb: 'Главная', requiresAuth: true  }},
+
+  {
+    path: '/workspaces/:id',
+    name: 'WorkspacePage',
+    component: () => import('../pages/workspace/WorkspacePage.vue'),
+    meta: { breadcrumb: (route: RouteLocationNormalized) => `Рабочая среда №${route.params.id}`, requiresAuth: true },
+    children: [
+      {
+        path: '',
+        redirect: (to: RouteLocation) => `/workspaces/${to.params.id}/dashboard`,
+      },
+      {
+        path: 'dashboard',
+        name: 'DashboardPage',
+        component: () => import('../pages/workspace/DashboardPage.vue'),
+        meta: { breadcrumb: 'Дашборд' }
+      },
+      {
+        path: 'projects',
+        children: [
+          {
+            path: '',
+            name: 'ProjectsList',
+            component: () => import('../pages/workspace/ProjectsList.vue'),
+            meta: { breadcrumb: 'Проекты' }
+          },
+          {
+            path: ':projectId/tasks',
+            name: 'ProjectTasks',
+            component: () => import('../pages/workspace/project/ProjectTasksList.vue'),
+            meta: { breadcrumb: 'Задачи проекта' }
+          }
+        ]
+      },
+      { path: 'employees', name: 'EmployeesList', component: () => import('../pages/workspace/EmployeesList.vue'), meta: { breadcrumb: 'Сотрудники' }},
+      { path: 'reports', name: 'ReportsList', component: () => import('../pages/workspace/ReportsList.vue'), meta: { breadcrumb: 'Отчеты' }},
+      { path: 'settings', name: 'WorkspaceSettings', component: () => import('../pages/workspace/WorkspaceSettings.vue'), meta: { breadcrumb: 'Настройки' }}
+    ]
+  },
   {
     path: '/admin',
     name: 'Admin',
@@ -31,7 +70,7 @@ const routes = [
           {
             path: ':id',
             name: 'WorkspacePage',
-            component: () => import('../pages/admin/workspace/WorkspacePage.vue'),
+            component: () => import('../pages/workspace/WorkspacePage.vue'),
             meta: { breadcrumb: (route: RouteLocationNormalized) => `Рабочая среда №${route.params.id}` },
             children: [
               {
@@ -42,31 +81,31 @@ const routes = [
               {
                 path: 'dashboard',
                 name: 'WorkspaceDashboard',
-                component: () => import('../pages/admin/workspace/WorkspaceDashboard.vue'),
+                component: () => import('../pages/workspace/DashboardPage.vue'),
                 meta: { breadcrumb: 'Дашборд' }
               },
               {
                 path: 'projects',
-                name: 'WorkspaceProjects',
-                component: () => import('../pages/admin/workspace/WorkspaceProjects.vue'),
+                name: 'ProjectsList',
+                component: () => import('../pages/workspace/ProjectsList.vue'),
                 meta: { breadcrumb: 'Проекты' }
               },
               {
                 path: 'employees',
-                name: 'WorkspaceEmployees',
-                component: () => import('../pages/admin/workspace/WorkspaceEmployees.vue'),
+                name: 'EmployeesList',
+                component: () => import('../pages/workspace/EmployeesList.vue'),
                 meta: { breadcrumb: 'Сотрудники' }
               },
               {
                 path: 'reports',
                 name: 'WorkspaceReports',
-                component: () => import('../pages/admin/workspace/WorkspaceReports.vue'),
+                component: () => import('../pages/workspace/ReportsList.vue'),
                 meta: { breadcrumb: 'Отчеты' }
               },
               {
                 path: 'settings',
                 name: 'WorkspaceSettings',
-                component: () => import('../pages/admin/workspace/WorkspaceSettings.vue'),
+                component: () => import('../pages/workspace/WorkspaceSettings.vue'),
                 meta: { breadcrumb: 'Настройки' }
               }
             ]
@@ -100,9 +139,12 @@ router.beforeEach((to, from) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return '/login'
   } else if (to.path === '/login' && authStore.isAuthenticated) {
-    return '/home'
-  } else if (to.meta.requiresAdmin && !authStore.isAdmin) {
-    return '/home'
+    if (authStore.userRoleId === 1) {
+      return '/admin/workspaces'
+    }
+    return `/workspaces/${authStore.userWorkspaceId}/dashboard`
+  } else if (to.meta.requiresAdmin && authStore.userRoleId !== 1) {
+    return `/workspaces/${authStore.userWorkspaceId}/dashboard`
   }
 })
 

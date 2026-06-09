@@ -8,30 +8,34 @@
       </div>
 
       <nav class="nav-group">
-        <SideBarNavItem v-if="authStore.userRole !== 'admin'"  to="/tasks" :isCollapsed="isCollapsed">
-          <template #icon>📋</template>
-          Задачи
+        <SideBarNavItem v-for="item in menuItems" :key="item.to" :to="item.to" :isCollapsed="isCollapsed">
+          <template #icon>{{ item.icon }}</template>
+          {{ item.label }}
         </SideBarNavItem>
+<!--        <SideBarNavItem v-if="authStore.userRole !== 'admin'"  to="/tasks" :isCollapsed="isCollapsed">-->
+<!--          <template #icon>📋</template>-->
+<!--          Задачи-->
+<!--        </SideBarNavItem>-->
 
-        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/projects" :isCollapsed="isCollapsed">
-          <template #icon>📁</template>
-          Проекты
-        </SideBarNavItem>
+<!--        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/projects" :isCollapsed="isCollapsed">-->
+<!--          <template #icon>📁</template>-->
+<!--          Проекты-->
+<!--        </SideBarNavItem>-->
 
-        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/history" :isCollapsed="isCollapsed">
-          <template #icon>⏱️</template>
-          История
-        </SideBarNavItem>
+<!--        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/history" :isCollapsed="isCollapsed">-->
+<!--          <template #icon>⏱️</template>-->
+<!--          История-->
+<!--        </SideBarNavItem>-->
 
-        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/history" :isCollapsed="isCollapsed">
-          <template #icon>👥</template>
-          Добавить Пользователя
-        </SideBarNavItem>
+<!--        <SideBarNavItem v-if="authStore.userRole !== 'admin'" to="/history" :isCollapsed="isCollapsed">-->
+<!--          <template #icon>👥</template>-->
+<!--          Сотрудники-->
+<!--        </SideBarNavItem>-->
 
-        <SideBarNavItem v-if="authStore.userRole === 'admin'" to="/admin" :isCollapsed="isCollapsed">
-          <template #icon>🛡️</template>
-          Администрирование
-        </SideBarNavItem>
+<!--        <SideBarNavItem v-if="authStore.userRole === 'admin'" to="/admin" :isCollapsed="isCollapsed">-->
+<!--          <template #icon>🛡️</template>-->
+<!--          Администрирование-->
+<!--        </SideBarNavItem>-->
       </nav>
 
       <div class="action-container">
@@ -79,15 +83,48 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import SideBarNavItem from '../nav/SideBarNavItem.vue'
 import { useAuthStore } from '../../stores/auth'
 
-const isCollapsed = ref(false)
+const route = useRoute()
 const authStore = useAuthStore()
+
+const workspaceId = computed(() => {
+  if (route.params.id) return route.params.id;
+  return authStore.workspaceId;
+});
+
+const getPath = (path) => {
+  if (authStore.userRole === 'admin') return path
+  return `/workspaces/${workspaceId.value}${path}`
+}
+
+
+
+const menuItems = computed(() => {
+  if (authStore.isAdmin) {
+    return [
+      { to: '/admin/', label: 'Администрирование', icon: '🛡️' },
+      { to: '/admin/workspaces', label: 'Воркспейсы', icon: '📁️' },
+      { to: '/admin/users', label: 'Пользователи', icon: '👥' },
+      { to: '/admin/tariffs', label: 'Тарифы', icon: '💰' }
+    ]
+  }
+  return [
+    { to: `/workspaces/${workspaceId.value}/dashboard`, label: 'Дашборд', icon: '📋' },
+    { to: `/workspaces/${workspaceId.value}/projects`, label: 'Проекты', icon: '📁' },
+    { to: `/workspaces/${workspaceId.value}/employees`, label: 'Сотрудники', icon: '👥' },
+    { to: `/workspaces/${workspaceId.value}/reports`, label: 'Отчеты', icon: '📊' },
+    { to: `/workspaces/${workspaceId.value}/settings`, label: 'Настройки', icon: '⚙️' }
+  ]
+})
+
+const isCollapsed = ref(false)
+
 const toggleSettingsPanel = () => {
   console.log('Панель меню')
-
 }
 
 onMounted(() =>{

@@ -24,7 +24,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public record InviteResponse(String email, String rawPassword, String message) {}
-    public record LoginResponse(Long userId, String role, String fullName, String email) {}
+    public record LoginResponse(Long userId, String role, String fullName, String email, Integer workspaceId) {}
 
     public InviteResponse inviteEmployee(String email, String fullName, Integer workspaceId) {
         if (userRepository.existsByEmail(email)) { throw new RuntimeException("Email уже занят"); }
@@ -77,7 +77,7 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public LoginResponse  login(String email, String password) {
+    public LoginResponse login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .filter(u -> passwordEncoder.matches(password, u.getPasswordHash()))
                 .orElseThrow(() -> new RuntimeException("Неверный email или пароль"));
@@ -85,7 +85,8 @@ public class AuthService {
                 user.getId(),
                 user.getRole().getName(),
                 user.getFullName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getWorkspaceId()
         );
     }
 

@@ -165,7 +165,6 @@ const onDeleteConfirm = async () => {
 const onUpdate = async (data: any) => {
   try {
     const response = await axios.put(`/api/tariffs/${selectedTariff.value.id}`, data)
-    // Обновляем в списке
     const index = tariffs.value.findIndex(t => t.id === selectedTariff.value.id)
     if (index !== -1) {
       tariffs.value[index] = transformTariff(response.data)
