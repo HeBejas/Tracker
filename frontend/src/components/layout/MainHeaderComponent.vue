@@ -46,25 +46,57 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
-  import { useRoute } from 'vue-router'
-  import HeaderNavItem from '../nav/HeaderNavItem.vue'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import HeaderNavItem from '../nav/HeaderNavItem.vue'
 
-  const route = useRoute()
-  const breadcrumbs = computed(() => {
-    return route.matched
-      .filter(item => item.meta && item.meta.breadcrumb)
-      .map(item => {
-        const label = typeof item.meta.breadcrumb === 'function'
-            ? item.meta.breadcrumb(route)
-            : item.meta.breadcrumb
-        return {
-          label: label,
-          to: item.path
-        }
-      })
-  })
+const route = useRoute()
+const router = useRouter()
+
+const breadcrumbs = computed(() => {
+  const crumbs = []
+  const seenPaths = new Set()
+
+  for (const item of route.matched) {
+    if (!item.meta || !item.meta.breadcrumb) continue
+
+    const resolved = router.resolve({ path: item.path, params: route.params })
+    const fullPath = resolved.fullPath
+
+    if (seenPaths.has(fullPath)) continue
+
+    seenPaths.add(fullPath)
+
+    const label = typeof item.meta.breadcrumb === 'function'
+        ? item.meta.breadcrumb(route)
+        : item.meta.breadcrumb
+
+    crumbs.push({ label, to: fullPath })
+  }
+
+  return crumbs
+})
 </script>
+<!--<script setup>-->
+<!--  import { computed } from 'vue'-->
+<!--  import { useRoute } from 'vue-router'-->
+<!--  import HeaderNavItem from '../nav/HeaderNavItem.vue'-->
+
+<!--  const route = useRoute()-->
+<!--  const breadcrumbs = computed(() => {-->
+<!--    return route.matched-->
+<!--      .filter(item => item.meta && item.meta.breadcrumb)-->
+<!--      .map(item => {-->
+<!--        const label = typeof item.meta.breadcrumb === 'function'-->
+<!--            ? item.meta.breadcrumb(route)-->
+<!--            : item.meta.breadcrumb-->
+<!--        return {-->
+<!--          label: label,-->
+<!--          to: item.path-->
+<!--        }-->
+<!--      })-->
+<!--  })-->
+<!--</script>-->
 
 <style scoped>
 .app-header {

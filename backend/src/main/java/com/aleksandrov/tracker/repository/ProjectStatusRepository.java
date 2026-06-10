@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ProjectStatusRepository extends JpaRepository<ProjectStatus, Long>{
-
+    Optional<ProjectStatus> findByName(String name);
 }

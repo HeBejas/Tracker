@@ -28,7 +28,12 @@ export const useAuthStore = defineStore('auth', {
             localStorage.setItem('fullName', fullName)
             localStorage.setItem('email', email)
             localStorage.setItem('workspaceId', workspaceId)
-            this.isAuthenticated = true
+
+            if (workspaceId) {
+                localStorage.setItem('workspaceId', String(workspaceId))
+            } else {
+                localStorage.removeItem('workspaceId')
+            }
         },
         logout() {
             this.token = null

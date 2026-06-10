@@ -2,12 +2,14 @@ package com.aleksandrov.tracker.controller;
 
 import com.aleksandrov.tracker.model.Project;
 import com.aleksandrov.tracker.service.ProjectService;
+import com.aleksandrov.tracker.dto.CreateProjectCreateDto;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -22,5 +24,27 @@ public class ProjectController {
         List<Project> projects = projectService.getProjectsByWorkspaceId(workspaceId);
         return ResponseEntity.ok(projects);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
+        Project project = projectService.getProjectById(id);
+        return ResponseEntity.ok(project);
+    }
+
+    @PostMapping
+    public ResponseEntity<Project> createProject(
+            @RequestBody CreateProjectCreateDto dto,
+            @RequestParam Long authorId
+    ) {
+        Project createdProject = projectService.createProject(dto, authorId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Project updatedProject = projectService.updateProjectFields(id, updates);
+        return ResponseEntity.ok(updatedProject);
+    }
+
 
 }

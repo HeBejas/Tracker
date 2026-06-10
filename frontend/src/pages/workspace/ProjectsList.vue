@@ -1,37 +1,47 @@
 <template>
   <FrameWrapperComponent>
-    <FrameSimpleHeaderComponent>Проекты</FrameSimpleHeaderComponent>
-<!--    <FrameContentComponent>-->
+<!--    <FrameSimpleHeaderComponent>Проекты</FrameSimpleHeaderComponent>-->
+    <FrameSimpleHeaderComponent>
+      Проекты
+      <template #actions>
+        <CreateButton @click="showSubmitModal = true">
+          Создать проект
+        </CreateButton>
+      </template>
+    </FrameSimpleHeaderComponent>
+
       <TableComponent
           :columns="output_columns"
           :data="projects"
           @row-click="handleProjectClick"
       />
-
-<!--    </FrameContentComponent>-->
   </FrameWrapperComponent>
+  <SubmitModal
+      :show="showSubmitModal"
+      title="Создать новый проект"
+      text="Вы уверены что хотите создать новый проект?"
+      submitLabel="Создать"
+      @close="showSubmitModal = false"
+      @submit="handleCreateNewProject"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import FrameWrapperComponent from '../../components/frame/FrameWrapperComponent.vue'
 import FrameSimpleHeaderComponent from '../../components/frame/FrameSimpleHeaderComponent.vue'
 import TableComponent, { type TableColumn } from '../../components/tables/TableComponent.vue'
+import CreateButton from '../../components/buttons/CreateBtn.vue'
+import SubmitModal from '../../components/modals/SubmitModal.vue'
+import type { Project } from '@/types/project'
 
-interface Project{
-  id: number
-  workspace_id: number
-  status_id: number
-  name: string
-  description: string | null
-  start_date: string | null
-  end_date: string | null
-  total_tasks_count: number
-  completed_tasks_count: number
-  created_at: string
-}
+const route = useRoute();
+const router = useRouter()
+const projects = ref<Project[]>([])
+const authStore = useAuthStore()
 
 const output_columns: TableColumn[] = [
   { key: 'name', label: 'Название', sortable: true, name_field: true },
@@ -40,22 +50,23 @@ const output_columns: TableColumn[] = [
       { value: 1, label: 'В работе' },
       { value: 2, label: 'Приостановлен' },
       { value: 3, label: 'Завершен' },
-      { value: 4, label: 'Отменен' }
+      { value: 4, label: 'Отменен' },
+      { value: 5, label: 'Новый' },
     ]
   },
-  { key: 'progress', label: 'Прогресс', type:'progress-bar', from:'totalTasksCount', to:'completedTasksCount', sortable: false},
-  { key: 'totalTasksCount', label: 'Всего задач', type:'number',sortable: true, filterable: true  },
-  { key: 'completedTasksCount', label: 'Задач выполнено', type:'number', sortable: true, filterable: true  },
-  // { key: 'startDate', label: 'Дата начала',type:'date' , sortable: true },
-  { key: 'endDate', label: 'Дата окончания', type:'date' ,sortable: true, filterable: true  },
-  { key: 'createdAt', label: 'Создан', type:'date', sortable: true, filterable: true  }
+  { key: 'progress', label: 'Прогресс', type: 'progress-bar', from: 'totalTasksCount', to: 'completedTasksCount', sortable: false },
+  { key: 'totalTasksCount', label: 'Всего задач', type: 'number', sortable: true, filterable: true },
+  { key: 'completedTasksCount', label: 'Задач выполнено', type: 'number', sortable: true, filterable: true },
+  { key: 'deadlineDate', label: 'Дедлайн', type: 'date', sortable: true, filterable: true },
+  { key: 'createdAt', label: 'Создан', type: 'date', sortable: true, filterable: true }
 ]
 
-const route = useRoute();
-const projects = ref<Project[]>([])
-
 const handleProjectClick = (project: Project) => {
-  router.push(`/projects/${project.id}`)
+  router.push({
+    name: 'ProjectPage',
+    params: { projectId: project.id },
+    state: { projectName: project.name }
+  })
 }
 
 const fetchProjects = async () => {
@@ -66,14 +77,44 @@ const fetchProjects = async () => {
     })
     projects.value = response.data
   } catch (error) {
-    console.error('Ошибка при загрузке проектов:', error);
+    console.error(`Ошибка при загрузке проектов: ${error}`);
   }
   console.log(projects.value)
 }
+
 onMounted(() => {
   fetchProjects()
 })
 
+const showSubmitModal = ref(false)
+
+const handleCreateNewProject = async () => {
+  const workspaceId = route.params?.id
+  const authorId = authStore?.userId
+  if (!authorId || !workspaceId) return
+  try {
+    const response = await axios.post('/api/projects',
+        {
+          name: 'Новый проект',
+          workspaceId: workspaceId
+        },
+        {
+          params: {
+            authorId: authorId
+          }
+        }
+    )
+    const newProjectId = response.data.id
+    handleProjectClick(response.data)
+    // router.push({
+    //   name: 'ProjectPage',
+    //   params: { projectId: newProjectId},
+    //   state: { projectName: response.data.name }
+    // })
+  } catch (error) {
+    console.error('Не удалось создать проект:', error)
+  }
+}
 </script>
 
 

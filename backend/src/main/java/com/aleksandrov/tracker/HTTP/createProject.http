@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/projects?authorId=25
+Content-Type: application/json
+
+{
+  "name": "Новый проект",
+  "workspaceId": 2
+}

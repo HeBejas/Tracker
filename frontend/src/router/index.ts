@@ -11,11 +11,11 @@ const routes = [
   {
     path: '/workspaces/:id',
     component: () => import('../pages/workspace/WorkspaceLayout.vue'),
-    meta: { /* breadcrumb: (route: RouteLocationNormalized) => `Рабочая среда №${route.params.id}`, */ requiresAuth: true },
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
-        name: 'WorkspaceDashboard',
+        name: 'WorkspaceDashboardRedirect',
         redirect: (to: RouteLocation) => `/workspaces/${to.params.id}/dashboard`,
       },
       {
@@ -24,12 +24,56 @@ const routes = [
         component: () => import('../pages/workspace/DashboardPage.vue'),
         meta: { breadcrumb: 'Дашборд' }
       },
-      { path: 'projects', name: 'ProjectsList', component: () => import('../pages/workspace/ProjectsList.vue'), meta: { breadcrumb: 'Проекты' }},
-      { path: 'projects/:projectId/tasks', name: 'ProjectTasks', component: () => import('../pages/workspace/project/ProjectTasksList.vue'), meta: { breadcrumb: 'Задачи проекта' }},
 
-      { path: 'employees', name: 'EmployeesList', component: () => import('../pages/workspace/EmployeesList.vue'), meta: { breadcrumb: 'Сотрудники' }},
-      { path: 'reports', name: 'ReportsList', component: () => import('../pages/workspace/ReportsList.vue'), meta: { breadcrumb: 'Отчеты' }},
-      { path: 'settings', name: 'WorkspaceSettings', component: () => import('../pages/workspace/WorkspaceSettings.vue'), meta: { breadcrumb: 'Настройки' }}
+      // Вложенная структура для проектов
+      {
+        path: 'projects',
+        component: RouterView,
+        meta: { breadcrumb: 'Проекты'},
+        children: [
+          {
+            path: '',
+            name: 'ProjectsList',
+            component: () => import('../pages/workspace/ProjectsList.vue'),
+          },
+          {
+            path: ':projectId',
+            component: () => import('../pages/workspace/project/ProjectLayout.vue'),
+            meta: {
+              breadcrumb: (route: RouteLocationNormalized) => {
+                const parent = route.matched.find(r => r.path.includes(':projectId'))
+                return parent?.meta.projectName || window.history.state?.projectName || `Проект ${route.params.projectId}`
+              },
+              showChildTabs: true },
+            children: [
+              {
+                path: '',
+                name: 'ProjectPage',
+                component: () => import('../pages/workspace/project/ProjectPage.vue'),
+                meta: { breadcrumb: 'Главная' }
+              },
+              {
+                path: 'tasks',
+                name: 'ProjectTasks',
+                meta: { breadcrumb: 'Задачи' },
+                component: () => import('../pages/workspace/project/ProjectTasksList.vue')
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'reports',
+        name: 'ReportsList',
+        component: () => import('../pages/workspace/ReportsList.vue'),
+        meta: { breadcrumb: 'Отчеты' }
+      },
+      {
+        path: 'settings',
+        name: 'WorkspaceSettings',
+        component: () => import('../pages/workspace/WorkspaceSettings.vue'),
+        meta: { breadcrumb: 'Настройки' }
+      }
     ]
   },
   {

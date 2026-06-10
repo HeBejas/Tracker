@@ -2,15 +2,14 @@ package com.aleksandrov.tracker.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "projects")
 @Data
-
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,20 +20,10 @@ public class Project {
     @JsonIgnore
     private Workspace workspace;
 
-    @JsonProperty("workspaceId")
-    public Long getWorkspaceId() {
-        return workspace != null ? workspace.getId() : null;
-    }
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id", nullable = false)
     @JsonIgnore
     private ProjectStatus status;
-
-    @JsonProperty("statusId")
-    public Long getStatusId() {
-        return status != null ? status.getId() : null;
-    }
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -43,10 +32,13 @@ public class Project {
     private String description;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
+    @Column(name = "deadline_date")
+    private LocalDate deadlineDate;
+
+    @Column(name = "completed_at")
+    private OffsetDateTime completedAt;
 
     @Column(name = "total_tasks_count")
     private Integer totalTasksCount;
@@ -55,6 +47,28 @@ public class Project {
     private Integer completedTasksCount;
 
     @Column(name = "created_at", insertable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private OffsetDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false, updatable = false)
+    @JsonIgnore
+    private User author;
+
+    @JsonProperty("workspaceId")
+    public Long getWorkspaceId() {
+        return workspace != null ? workspace.getId() : null;
+    }
+
+    @JsonProperty("statusId")
+    public Long getStatusId() {
+        return status != null ? status.getId() : null;
+    }
+
+    @JsonProperty("authorId")
+    public Long getAuthorId() {
+        return author != null ? author.getId() : null;
+    }
 }
