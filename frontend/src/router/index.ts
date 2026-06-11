@@ -3,6 +3,9 @@ import DashboardPage from '../pages/DashboardPage.vue'
 import { useAuthStore } from '../stores/auth'
 import type { RouteLocationNormalized, RouteLocation } from 'vue-router'
 
+import { ref } from 'vue'
+export const currentProjectName = ref('')
+
 const routes = [
   { path: '/', redirect: '/login', meta: { HideLayout: true }},
   { path: '/login', name: 'Login', component: () => import('../pages/LoginPage.vue'), meta: { HideLayout: true, requiresAuth: false }},
@@ -41,8 +44,7 @@ const routes = [
             component: () => import('../pages/workspace/project/ProjectLayout.vue'),
             meta: {
               breadcrumb: (route: RouteLocationNormalized) => {
-                const parent = route.matched.find(r => r.path.includes(':projectId'))
-                return parent?.meta.projectName || window.history.state?.projectName || `Проект ${route.params.projectId}`
+                return currentProjectName.value || `Проект ${route.params.projectId}`
               },
               showChildTabs: true },
             children: [
@@ -50,7 +52,7 @@ const routes = [
                 path: '',
                 name: 'ProjectPage',
                 component: () => import('../pages/workspace/project/ProjectPage.vue'),
-                meta: { breadcrumb: 'Главная' }
+                meta: { breadcrumb: 'О проекте' }
               },
               {
                 path: 'tasks',

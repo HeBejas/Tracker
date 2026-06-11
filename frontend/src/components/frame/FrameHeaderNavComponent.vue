@@ -50,6 +50,6 @@ const navigate = (path: string) => {
   gap: 30px;
   padding-bottom: 0;
   border-bottom: 2px solid #e2e8f0;
-  margin-bottom: 24px;
+  //margin-bottom: 24px;
 }
 </style>

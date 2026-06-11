@@ -36,7 +36,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
 }
 h2 {
   margin: 0;
@@ -45,6 +44,6 @@ h2 {
 }
 .header-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 </style>

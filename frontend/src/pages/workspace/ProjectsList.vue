@@ -106,11 +106,6 @@ const handleCreateNewProject = async () => {
     )
     const newProjectId = response.data.id
     handleProjectClick(response.data)
-    // router.push({
-    //   name: 'ProjectPage',
-    //   params: { projectId: newProjectId},
-    //   state: { projectName: response.data.name }
-    // })
   } catch (error) {
     console.error('Не удалось создать проект:', error)
   }

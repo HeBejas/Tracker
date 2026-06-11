@@ -22,6 +22,7 @@ import FrameWrapperComponent from "../../../components/frame/FrameWrapperCompone
 import FrameSimpleHeaderComponent from "../../../components/frame/FrameSimpleHeaderComponent.vue"
 import FrameHeaderNavComponent from '../../../components/frame/FrameHeaderNavComponent.vue'
 import type { Project } from '@/types/project'
+import { currentProjectName } from '@/router/index'
 
 const route = useRoute()
 const router = useRouter()
@@ -32,6 +33,7 @@ const fetchProject = async () => {
     const projectId = route.params.projectId
     const response = await axios.get(`api/projects/${projectId}`)
     project.value = response.data
+    currentProjectName.value = response.data.name
     setProjectNameInMeta(response.data.name)
   } catch (error) {
     console.error(`Ошибка загрузки проекта: ${error}`)
@@ -42,6 +44,7 @@ onMounted(() => {
 })
 
 const setProjectNameInMeta = (name: string) => {
+  currentProjectName.value = name
   const parentRoute = route.matched.find(r => r.path.includes(':projectId'))
   if (parentRoute) {
     parentRoute.meta.projectName = name
