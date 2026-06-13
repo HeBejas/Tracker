@@ -7,29 +7,57 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name = "projects")
+@Table(name = "tasks")
 @Data
-public class Project {
+
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workspace_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false)
     @JsonIgnore
-    private Workspace workspace;
-    @JsonProperty("workspaceId")
-    public Long getWorkspaceId() {
-        return workspace != null ? workspace.getId() : null;
+    private Project project;
+    @JsonProperty("projectId")
+    public Long getProjectId() {
+        return project != null ? project.getId() : null;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_task_id", nullable = true)
+    @JsonIgnore
+    private Task parentTask;
+    @JsonProperty("parentTaskId")
+    public Long getParentTaskId() {
+        return parentTask != null ? parentTask.getId() : null;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    @JsonIgnore
+    private User author;
+    @JsonProperty("authorId")
+    public Long getAuthorId() {
+        return author != null ? author.getId() : null;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id", nullable = false)
     @JsonIgnore
-    private ProjectStatus status;
+    private TaskStatus status;
     @JsonProperty("statusId")
     public Long getStatusId() {
         return status != null ? status.getId() : null;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priority_id", nullable = false)
+    @JsonIgnore
+    private TaskPriority priority;
+    @JsonProperty("priorityId")
+    public Long getPriorityId() {
+        return priority != null ? priority.getId() : null;
     }
 
     @Column(name = "name", nullable = false)
@@ -44,24 +72,9 @@ public class Project {
     @Column(name = "completed_at", nullable = true)
     private OffsetDateTime completedAt;
 
-    @Column(name = "total_tasks_count", nullable = false)
-    private Integer totalTasksCount;
-
-    @Column(name = "completed_tasks_count", nullable = false)
-    private Integer completedTasksCount;
-
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", nullable = false, updatable = false)
-    @JsonIgnore
-    private User author;
-    @JsonProperty("authorId")
-    public Long getAuthorId() {
-        return author != null ? author.getId() : null;
-    }
 }

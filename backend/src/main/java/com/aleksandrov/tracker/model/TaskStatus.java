@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "project_statuses")
+@Table(name = "task_statuses")
 @Data
 
-public class ProjectStatus {
+public class TaskStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

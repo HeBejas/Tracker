@@ -8,7 +8,7 @@ public class ProjectCommentResponseDto {
     private Long id;
     private Long projectId;
     private Long userId;
-    private String authorName; // Сюда положим имя
+    private String authorName;
     private Long replyId;
     private String message;
     private OffsetDateTime createdAt;

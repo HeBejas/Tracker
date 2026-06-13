@@ -1,6 +1,6 @@
 package com.aleksandrov.tracker.service;
 
-import com.aleksandrov.tracker.dto.CreateProjectCreateDto;
+import com.aleksandrov.tracker.dto.CreateProjectDto;
 import com.aleksandrov.tracker.model.Workspace;
 import com.aleksandrov.tracker.model.Project;
 import com.aleksandrov.tracker.model.ProjectStatus;
@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Map;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Service
@@ -36,7 +35,7 @@ public class ProjectService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Проект не найден"));
     }
 
-    public Project createProject(CreateProjectCreateDto dto, Long authorId) {
+    public Project createProject(CreateProjectDto dto, Long authorId) {
         User author = userRepository.findById(authorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден"));
 

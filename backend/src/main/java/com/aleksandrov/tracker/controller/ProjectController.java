@@ -2,11 +2,10 @@ package com.aleksandrov.tracker.controller;
 
 import com.aleksandrov.tracker.model.Project;
 import com.aleksandrov.tracker.service.ProjectService;
-import com.aleksandrov.tracker.dto.CreateProjectCreateDto;
+import com.aleksandrov.tracker.dto.CreateProjectDto;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<Project> createProject(
-            @RequestBody CreateProjectCreateDto dto,
+            @RequestBody CreateProjectDto dto,
             @RequestParam Long authorId
     ) {
         Project createdProject = projectService.createProject(dto, authorId);

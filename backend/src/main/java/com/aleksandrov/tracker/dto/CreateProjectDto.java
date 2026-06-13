@@ -3,7 +3,7 @@ package com.aleksandrov.tracker.dto;
 import lombok.Data;
 
 @Data
-public class CreateProjectCreateDto {
+public class CreateProjectDto {
     private String name;
     private Long workspaceId;
     private String status = "new";
