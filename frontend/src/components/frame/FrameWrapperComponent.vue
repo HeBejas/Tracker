@@ -11,7 +11,7 @@
 
 <style scoped>
 .frame-wrapper {
-  padding-top: 1.5rem;
+  padding-top: 1rem;
 }
 .frame{
   display: flex;

@@ -4,7 +4,6 @@ export interface Project {
     statusId: number;
     name: string;
     description: string | null;
-    startDate: string | null;
     deadlineDate: string | null;
     completedAt: string | null;
     totalTasksCount: number;

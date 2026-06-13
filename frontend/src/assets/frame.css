@@ -1,0 +1,40 @@
+.object-wrapper-component {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.object-item-component {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.object-info-panel {
+    width: 300px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 24px;
+}
+
+@media (max-width: 1200px) {
+    .object-wrapper-component {
+        flex-direction: column-reverse;
+        gap: 24px;
+        padding: 16px;
+    }
+    .object-info-panel {
+        width: 100%;
+        position: static;
+        box-sizing: border-box;
+    }
+}

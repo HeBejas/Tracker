@@ -3,14 +3,10 @@
 
     <FrameSimpleHeaderComponent>{{ project.name }}</FrameSimpleHeaderComponent>
     <FrameHeaderNavComponent />
-
-     <FrameContentWrapperComponent>
-        <router-view
-            :project="project"
-            :state="{ projectName: project.name }"
-        />
-     </FrameContentWrapperComponent>
-
+      <router-view
+          :project="project"
+          :state="{ projectName: project.name }"
+      />
   </FrameWrapperComponent>
 </template>
 

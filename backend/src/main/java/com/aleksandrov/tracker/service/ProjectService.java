@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -59,21 +61,23 @@ public class ProjectService {
     public Project updateProjectFields(Long id, Map<String, Object> updates) {
         Project project = getProjectById(id);
 
-        if (updates.containsKey("name")) {
-            project.setName((String) updates.get("name"));
-        }
-
-        if (updates.containsKey("description")) {
-            project.setDescription((String) updates.get("description"));
-        }
-
+        if (updates.containsKey("name")) { project.setName((String) updates.get("name")); }
+        if (updates.containsKey("description")) { project.setDescription((String) updates.get("description")); }
         if (updates.containsKey("statusId")) {
             Long statusId = Long.valueOf(updates.get("statusId").toString());
             ProjectStatus status = projectStatusRepository.findById(statusId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Статус не найден"));
             project.setStatus(status);
         }
+        if (updates.containsKey("deadlineDate")) {
+            String dateStr = updates.get("deadlineDate").toString();
+            OffsetDateTime offsetTime = OffsetDateTime.parse(dateStr);
+            OffsetDateTime localTime = offsetTime
+                    .atZoneSameInstant(java.time.ZoneId.systemDefault())
+                    .toOffsetDateTime();
 
+            project.setDeadlineDate(localTime);
+        }
         return projectRepository.save(project);
     }
 

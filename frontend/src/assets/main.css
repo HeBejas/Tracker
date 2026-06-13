@@ -1,5 +1,7 @@
 @import './constants.css';
 @import './modal.css';
+@import './frame.css';
+
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

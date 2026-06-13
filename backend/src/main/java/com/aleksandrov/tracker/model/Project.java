@@ -31,11 +31,8 @@ public class Project {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
-
     @Column(name = "deadline_date")
-    private LocalDate deadlineDate;
+    private java.time.OffsetDateTime deadlineDate;
 
     @Column(name = "completed_at")
     private OffsetDateTime completedAt;
