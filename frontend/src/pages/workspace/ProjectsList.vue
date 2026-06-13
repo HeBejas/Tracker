@@ -1,6 +1,5 @@
 <template>
   <FrameWrapperComponent>
-<!--    <FrameSimpleHeaderComponent>Проекты</FrameSimpleHeaderComponent>-->
     <FrameSimpleHeaderComponent>
       Проекты
       <template #actions>

@@ -6,7 +6,18 @@
         :description = project?.description
         @save="updateProjectDescription"
       />
-      <FrameObjectCommentsComponent />
+      <FrameObjectCommentsComponent
+          :comments="projectComments"
+          @add="handleAddComment"
+          @delete="handleDeleteComment"
+      />
+      <DeleteModal
+          :show="showDeleteModal"
+          title="Удаление комментария"
+          text="Вы уверены, что хотите удалить этот комментарий?"
+          @close="closeDeleteModal"
+          @confirm="confirmDeleteComment"
+      />
     </div>
     <FrameObjectInfoPanelComponent />
 
@@ -14,15 +25,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import FrameObjectContentDescriptionComponent from '@/components/frame/FrameObjectContentDescriptionComponent.vue'
+import FrameObjectCommentsComponent from '@/components/frame/FrameObjectCommentsComponent.vue'
+import DeleteModal from '@/components/modals/DeleteModal.vue'
+
+import { formatUIDate } from '@/utils/dateUtils'
+import { buildCommentTree, addCommentToTree } from '@/utils/commentUtils'
+
 import type { Project } from '@/types/project'
+import type { Comment } from '@/types/comment'
+import { useAuthStore } from '@/stores/auth'
+import {deleteCommentFromTree} from "../../../utils/commentUtils";
+
+const authStore = useAuthStore()
+const showDeleteModal = ref(false)
+const projectComments = ref<Comment[]>([])
+const currentCommentId = ref<number | null>(null)
 
 const props = defineProps<{
   project: Project
 }>()
 
+// Дескрипшн
 const updateProjectDescription = async (newDescription: string) => {
   console.log('Новое описание прилетело:', newDescription)
   try {
@@ -30,9 +56,59 @@ const updateProjectDescription = async (newDescription: string) => {
       description: newDescription
     })
     props.project.description = response.data.description
-
   } catch (error) {
     console.error('Ошибка при сохранении:', error)
   }
 }
+// Комментарии
+
+const handleDeleteComment = (id: number) => {
+  currentCommentId.value = id
+  showDeleteModal.value = true
+}
+
+const handleAddComment = async (text: string, parentId?: number ) => {
+  const response = await axios.post(`/api/project-comments`, {
+      projectId: props.project.id,
+      message: text,
+      replyId: parentId || null
+    }, {
+    params: { userId: authStore.userId }
+  })
+  addCommentToTree(projectComments.value, response.data, authStore.fullName || `Пользователь ${authStore.userId}`, parentId)
+}
+
+const fetchComments = async() =>{
+  try {
+    const response = await axios.get(`/api/project-comments`, {
+      params: { projectId: props.project.id }
+    })
+    projectComments.value = buildCommentTree(response.data)
+  } catch (error) {
+    console.error('Ошибка при загрузке комментариев:', error)
+  }
+}
+
+onMounted(() => {
+  fetchComments()
+})
+
+// Модалки
+
+const closeDeleteModal = () => {
+  showDeleteModal.value = false
+  currentCommentId.value = null
+}
+const confirmDeleteComment = async() => {
+  if (currentCommentId.value === null) return
+  try {
+    const id = currentCommentId.value
+    await axios.delete(`/api/project-comments/${id}`)
+    deleteCommentFromTree(projectComments.value, id)
+    closeDeleteModal()
+  } catch (error) {
+    console.error('Ошибка при удалении комментария:', error)
+  }
+}
+
 </script>

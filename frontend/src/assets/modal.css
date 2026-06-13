@@ -1,0 +1,9 @@
+.modal-text {
+    color: #475569;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.modal-content {
+    display: flex; flex-direction: column; gap: 16px;
+}

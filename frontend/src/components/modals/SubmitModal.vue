@@ -34,12 +34,3 @@ const onSubmit = () => {
   emit('submit')
 }
 </script>
-
-<style scoped>
-
-.modal-text {
-  color: #475569;
-  font-size: 1rem;
-  margin: 0;
-}
-</style>

@@ -1,9 +1,9 @@
 <!-- DeleteModal.vue -->
 <template>
   <ModalOverlay :show="show" :title="title" @close="$emit('close')">
-
-      <p class="delete-message">{{ message }}</p>
-
+      <div class="modal-content">
+        <p class="modal-text">{{ text }}</p>
+      </div>
       <template #footer>
         <ModalSecondaryBtn @click="$emit('close')">Отмена</ModalSecondaryBtn>
         <ModalDeleteBtn @click="$emit('confirm')">Удалить</ModalDeleteBtn>
@@ -20,7 +20,7 @@ import ModalDeleteBtn from "./modals_buttons/ModalDeleteBtn.vue";
 defineProps<{
   show: boolean
   title: string
-  message: string
+  text: string
 }>()
 
 defineEmits<{
@@ -29,12 +29,3 @@ defineEmits<{
 }>()
 </script>
 
-<style scoped>
-.delete-content {
-  display: flex; flex-direction: column; gap: 16px;
-}
-
-.delete-message {
-  color: #475569; font-size: 0.95rem; margin: 0;
-}
-</style>
