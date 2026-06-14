@@ -62,9 +62,9 @@ const projectConfig: PanelFieldConfig[] = [
   { key: 'statusId', label: 'Статус', options: [
       { value: 1, label: 'В работе' },
       { value: 2, label: 'Приостановлен' },
-      // { value: 3, label: 'Завершен' },
+      { value: 3, label: 'Завершен' },
       { value: 4, label: 'Отменен' },
-      // { value: 5, label: 'Новый' },
+      { value: 5, label: 'Новый' },
     ]},
   { key: 'deadlineDate', label: 'Дедлайн', type: 'date' },
   { key: 'completedAt', label: 'Дата завершения', type: 'date', readonly: true },

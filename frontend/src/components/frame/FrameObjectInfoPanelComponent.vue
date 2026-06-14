@@ -286,28 +286,31 @@ const calculateProgress = (completed: number, total: number) => {
 /* Прогресс-бар */
 .progress-wrapper {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column; /* Меняем на колонку, чтобы текст был над баром */
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  max-width: 130px; /* Ограничиваем ширину как во втором компоненте */
 }
 
 .progress-text {
-  font-size: 13px;
+  font-size: 12px;
   color: #4b5563;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .progress-track {
-  flex: 1;
-  height: 6px;
+  width: 100%;
+  height: 8px; /* Увеличили высоту до 8px как во втором */
   background-color: #e5e7eb;
-  border-radius: 4px;
+  border-radius: 4px; /* Скругление */
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #10b981; /* Зеленый цвет */
+  background-color: #3b82f6; /* Синий цвет как во втором */
   border-radius: 4px;
   transition: width 0.4s ease;
 }

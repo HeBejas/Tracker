@@ -30,6 +30,10 @@
           class="description-textarea"
       ></textarea>
       <div class="description-actions">
+        <RegularObjectBtn @click="cancelEditing">
+          Отмена
+        </RegularObjectBtn>
+
         <RegularObjectBtn @click="saveChanges">
           <template #icon>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -38,15 +42,11 @@
           </template>
           Сохранить
         </RegularObjectBtn>
-
-        <RegularObjectBtn @click="cancelEditing">
-          Отмена
-        </RegularObjectBtn>
       </div>
     </div>
   </template>
-
 </template>
+
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
 import RegularObjectBtn from '@/components/buttons/RegularObjectBtn.vue'
@@ -91,46 +91,41 @@ const saveChanges = () => {
 }
 </script>
 
-
 <style scoped>
 .description-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 1rem;
-  font-size: 1rem;
   width: 100%;
 }
+
 .description-actions {
   display: flex;
-  align-items: center;
+  align-self: flex-end;
   gap: 8px;
 }
+
 .description-textarea {
   width: 100%;
   box-sizing: border-box;
   resize: none;
   outline: none;
-  field-sizing: content;
-  min-height: 80px;
+  min-height: 100px;
   padding: 12px 16px;
   border: 1px solid #e5e7eb;
-
-
   font-family: inherit;
   font-size: 15px;
   line-height: 1.6;
   color: #1f2937;
   field-sizing: content;
-
   border-radius: 8px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  font-size: 1rem;
 }
+
 .description-textarea:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
@@ -142,9 +137,6 @@ const saveChanges = () => {
 
 .description-textarea.disabled {
   cursor: default;
-  //background: #f9fafb;
   color: #6b7280;
 }
-
-
 </style>

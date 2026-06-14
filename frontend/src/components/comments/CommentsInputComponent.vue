@@ -29,13 +29,12 @@
     </div>
 
     <div class="input-comment-actions">
-      <button
+      <RegularObjectBtn
           v-if="showCancel"
-          class="cancel-btn"
           @click="$emit('cancel')"
       >
         Отмена
-      </button>
+      </RegularObjectBtn>
 
       <RegularObjectBtn :disabled="!newCommentText.trim()" @click="submitComment">
         {{ submitLabel }}
@@ -134,5 +133,5 @@ defineExpose({ focus })
 .font-italic { font-style: italic; }
 .font-underline { text-decoration: underline; }
 .font-strike { text-decoration: line-through; }
-.editor-textarea { width: 100%; min-height: 100px; padding: 12px 16px; border: none; resize: none; outline: none; font-family: inherit; font-size: 15px; line-height: 1.5; color: #1f2937; field-sizing: content; }
+.editor-textarea { width: 100%; min-height: 60px; padding: 12px 16px; border: none; resize: none; outline: none; font-family: inherit; font-size: 15px; line-height: 1.5; color: #1f2937; field-sizing: content; }
 </style>

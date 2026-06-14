@@ -9,36 +9,35 @@
   </button>
 </template>
 
-<script setup lang="ts">
-</script>
-
 <style scoped>
 .regular-object-btn {
-  font-size: 0.9rem;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 6px 12px;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  color: #606266;
   font-family: inherit;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 1.2;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  user-select: none;
   transition: all 0.2s ease;
   width: fit-content;
 }
 
 .regular-object-btn:hover {
-  background-color: #f4f4f5;
-  color: #303133;
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #94a3b8;
 }
 
 .regular-object-btn:active {
-  background-color: #e9e9eb;
-  transform: scale(0.98);
+  transform: translateY(1px);
+  box-shadow: none;
 }
 
 .btn-icon {
@@ -47,10 +46,13 @@
   justify-content: center;
   width: 16px;
   height: 16px;
-  color: currentColor;
 }
 
-.btn-text {
-  line-height: 1.4;
+.btn-icon :deep(svg) {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
 }
 </style>
