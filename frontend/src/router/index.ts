@@ -65,6 +65,12 @@ const routes = [
                     name: 'ProjectTasks',
                     meta: { breadcrumb: 'Задачи' },
                     component: () => import('../pages/workspace/project/ProjectTasksList.vue')
+                  },
+                  {
+                    path: 'settings',
+                    name: 'ProjectSettings',
+                    component: () => import('../pages/workspace/project/ProjectSettings.vue'),
+                    meta: { breadcrumb: 'Настройки' }
                   }
                 ]
               },
@@ -88,6 +94,12 @@ const routes = [
                         name: 'ProjectTaskPage',
                         component: () => import('../pages/workspace/task/TaskPage.vue'),
                         meta: { breadcrumb: 'О задаче' }
+                      },
+                      {
+                        path: 'settings',
+                        name: 'TaskSettings',
+                        component: () => import('../pages/workspace/task/TaskSettings.vue'),
+                        meta: { breadcrumb: 'Настройки' }
                       }
                     ]
                   }

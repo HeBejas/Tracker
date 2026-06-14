@@ -1,6 +1,9 @@
 <template>
   <template v-if="!isEditing">
     <div class="description-container">
+      <header class="frame-object-header">
+        <h3>Описание</h3>
+      </header>
       <textarea readonly class="description-textarea disabled" :class="{ 'is-empty': !description }">{{ description || 'Описание проекта' }}</textarea>
       <div class="description-actions">
         <RegularObjectBtn @click="startEditing">
@@ -18,6 +21,9 @@
 
   <template v-else>
     <div class="description-container">
+      <header class="frame-object-header">
+        <h3>Описание</h3>
+      </header>
       <textarea
           ref="textareaRef"
           v-model="editableText"
@@ -91,7 +97,7 @@ const saveChanges = () => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 1rem;
   font-size: 1rem;
   width: 100%;
 }
@@ -102,37 +108,42 @@ const saveChanges = () => {
 }
 .description-textarea {
   width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  outline: none;
+  field-sizing: content;
   min-height: 80px;
   padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+
+
   font-family: inherit;
-  font-size: 1.1rem;
+  font-size: 15px;
   line-height: 1.6;
-  color: #303133;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  box-sizing: border-box;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
-  resize: none;
+  color: #1f2937;
   field-sizing: content;
-  background: transparent;
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
-}
-.description-textarea.is-empty {
-  color: #909399;
-  font-style: italic;
-}
-.description-textarea.disabled {
-  cursor: default;
-  box-shadow: none;
-}
-.description-textarea.disabled:hover {
-  border-color: #ebeef5;
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+
+  border-radius: 8px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 1rem;
 }
 .description-textarea:focus {
-  border-color: #ebeef5;
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.description-textarea.is-empty {
+  color: #9ca3af;
+}
+
+.description-textarea.disabled {
+  cursor: default;
+  //background: #f9fafb;
+  color: #6b7280;
 }
 
 

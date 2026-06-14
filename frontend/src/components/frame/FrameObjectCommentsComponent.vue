@@ -1,6 +1,8 @@
 <template>
   <div class="comments-section">
-    <h3 class="comments-title">Комментарии ({{ totalComments }})</h3>
+    <header class="frame-object-header">
+      <h3>Комментарии ({{ totalComments }})</h3>
+    </header>
     <CommentsInputComponent
         @submit="text => $emit('add', text)"
     />
@@ -14,7 +16,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Comment } from '@/types/comment' // Твой путь до типов
+import type { Comment } from '@/types/comment'
 import RegularObjectBtn from '@/components/buttons/RegularObjectBtn.vue'
 import CommentsInputComponent from '@/components/comments/CommentsInputComponent.vue'
 import CommentsListComponent from '@/components/comments/CommentsListComponent.vue'
@@ -38,9 +40,8 @@ const totalComments = computed(() => {
 .comments-section {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1rem;
   width: 100%;
-  margin-top: 32px;
 }
 
 .comments-title {

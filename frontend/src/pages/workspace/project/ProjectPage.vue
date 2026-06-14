@@ -1,35 +1,38 @@
 <template>
-  <div class="object-wrapper-component">
-    <div class="object-item-component">
-      <FrameObjectContentDescriptionComponent
-        :description = project?.description
-        @save="updateProjectDescription"
-      />
-      <FrameObjectCommentsComponent
-          :comments="projectComments"
-          @add="handleAddComment"
-          @delete="handleDeleteComment"
-      />
-      <DeleteModal
-          :show="showDeleteModal"
-          title="Удаление комментария"
-          text="Вы уверены, что хотите удалить этот комментарий?"
-          @close="closeDeleteModal"
-          @confirm="confirmDeleteComment"
+  <FrameWrapperComponent>
+    <div class="object-wrapper-component">
+      <div class="object-item-component">
+        <FrameObjectContentDescriptionComponent
+          :description = project?.description
+          @save="updateProjectDescription"
+        />
+        <FrameObjectCommentsComponent
+            :comments="projectComments"
+            @add="handleAddComment"
+            @delete="handleDeleteComment"
+        />
+        <DeleteModal
+            :show="showDeleteModal"
+            title="Удаление комментария"
+            text="Вы уверены, что хотите удалить этот комментарий?"
+            @close="closeDeleteModal"
+            @confirm="confirmDeleteComment"
+        />
+      </div>
+      <FrameObjectInfoPanelComponent
+          class="object-info-panel"
+          :fields="projectConfig"
+          :data="project"
+          @update:field="handleFieldUpdate"
       />
     </div>
-    <FrameObjectInfoPanelComponent
-        class="object-info-panel"
-        :fields="projectConfig"
-        :data="project"
-        @update:field="handleFieldUpdate"
-    />
-  </div>
+  </FrameWrapperComponent>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import FrameWrapperComponent from "../../../components/frame/FrameWrapperComponent.vue"
 import FrameObjectContentDescriptionComponent from '@/components/frame/FrameObjectContentDescriptionComponent.vue'
 import FrameObjectCommentsComponent from '@/components/frame/FrameObjectCommentsComponent.vue'
 import FrameObjectInfoPanelComponent from '@/components/frame/FrameObjectInfoPanelComponent.vue'
@@ -41,7 +44,9 @@ import type { Project } from '@/types/project'
 import type { Comment } from '@/types/comment'
 import { useAuthStore } from '@/stores/auth'
 import {deleteCommentFromTree} from "../../../utils/commentUtils";
+import { useToast } from '@/utils/ToastUtils'
 
+const toast = useToast()
 const authStore = useAuthStore()
 const showDeleteModal = ref(false)
 const projectComments = ref<Comment[]>([])
@@ -80,22 +85,24 @@ const handleFieldUpdate = async ({ key, value }: { key: string, value: any }) =>
       dataToSend[key] = value
     }
     await axios.patch(`/api/projects/${props.project.id}`, dataToSend)
-
+    toast.success('Поле успешно обновлено')
   } catch (error) {
-    console.error(`Ошибка при сохранении поля ${error}`)
+    console.log(error)
+    toast.error(`Ошибка`)
     ;(props.project as any)[key] = oldValue
   }
 }
 // Дескрипшн
 const updateProjectDescription = async (newDescription: string) => {
-  console.log('Новое описание прилетело:', newDescription)
   try {
     const response = await axios.patch(`/api/projects/${props.project.id}`, {
       description: newDescription
     })
     props.project.description = response.data.description
+    toast.success('Описание успешно обновлено')
   } catch (error) {
-    console.error('Ошибка при сохранении:', error)
+    console.log(error)
+    toast.error(`Ошибка`)
   }
 }
 // Комментарии
@@ -105,14 +112,20 @@ const handleDeleteComment = (id: number) => {
 }
 
 const handleAddComment = async (text: string, parentId?: number ) => {
-  const response = await axios.post(`/api/project-comments`, {
-      projectId: props.project.id,
-      message: text,
-      replyId: parentId || null
-    }, {
-    params: { userId: authStore.userId }
-  })
-  addCommentToTree(projectComments.value, response.data, authStore.fullName || `Пользователь ${authStore.userId}`, parentId)
+    try {
+      const response = await axios.post(`/api/project-comments`, {
+        projectId: props.project.id,
+        message: text,
+        replyId: parentId || null
+      }, {
+        params: {userId: authStore.userId}
+      })
+      addCommentToTree(projectComments.value, response.data, authStore.fullName || `Пользователь ${authStore.userId}`, parentId)
+      toast.success('Комментарий успешно добавлен')
+    } catch (error) {
+      console.log(error)
+      toast.error(`Ошибка`)
+    }
 }
 
 const fetchComments = async() =>{
@@ -122,7 +135,8 @@ const fetchComments = async() =>{
     })
     projectComments.value = buildCommentTree(response.data)
   } catch (error) {
-    console.error('Ошибка при загрузке комментариев:', error)
+    console.log(error)
+    toast.error(`Ошибка`)
   }
 }
 
@@ -141,8 +155,10 @@ const confirmDeleteComment = async() => {
     await axios.delete(`/api/project-comments/${id}`)
     deleteCommentFromTree(projectComments.value, id)
     closeDeleteModal()
+    toast.success('Комментарий успешно удален')
   } catch (error) {
-    console.error('Ошибка при удалении комментария:', error)
+    console.log(error)
+    toast.error(`Ошибка`)
   }
 }
 

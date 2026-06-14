@@ -1,6 +1,6 @@
 .object-wrapper-component {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     align-items: flex-start;
     width: 100%;
     max-width: 1400px;
@@ -38,3 +38,48 @@
         box-sizing: border-box;
     }
 }
+
+
+.frame-object-header h3{
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+
+
+
+
+/* потом*/
+/*.frame-object-header{*/
+/*    padding: 20px 24px;*/
+/*    border-bottom: 1px solid #e5e7eb;*/
+/*    background: #f9fafb;*/
+/*}*/
+/*.frame-object-header h3{*/
+/*    margin: 0;*/
+/*    font-size: 1.1rem;*/
+/*    color: #374151;*/
+/*    font-weight: 600;*/
+/*}*/
+
+/*.frame-object-container{*/
+/*    background: #ffffff;*/
+/*    border: 1px solid #e5e7eb;*/
+/*    border-radius: 12px;*/
+/*    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.frame-object-container textarea{*/
+/*    padding: 10px 14px;*/
+/*    border: 1px solid #d1d5db;*/
+/*    border-radius: 8px;*/
+/*    font-size: 0.95rem;*/
+/*    color: #1f2937;*/
+/*    transition: border-color 0.2s, box-shadow 0.2s;*/
+/*    font-family: inherit;*/
+/*}*/
+
+

@@ -80,4 +80,10 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    public void deleteProject(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Проект с id " + id + " не найдена"));
+        projectRepository.delete(project);
+    }
+
 }

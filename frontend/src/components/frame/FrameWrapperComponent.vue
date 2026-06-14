@@ -1,5 +1,5 @@
 <template>
-  <div class="frame-wrapper">
+  <div class="frame-wrapper page-fade">
     <div class="frame">
       <slot />
     </div>
@@ -11,7 +11,7 @@
 
 <style scoped>
 .frame-wrapper {
-  padding-top: 1rem;
+  //padding-top: 1rem;
 }
 .frame{
   display: flex;

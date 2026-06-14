@@ -115,7 +115,7 @@ defineExpose({ focus })
 }
 .input-comment-wrapper:focus-within {
   border-color: #3b82f6;
-  box-shadow: 0 0 0 1px #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 .editor-toolbar {
   display: flex;

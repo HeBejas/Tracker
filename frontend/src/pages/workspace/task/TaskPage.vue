@@ -1,34 +1,37 @@
 <template>
-  <div class="object-wrapper-component">
-    <div class="object-item-component">
-      <FrameObjectContentDescriptionComponent
-          :description = task?.description
-          @save="updateTaskDescription"
-      />
-      <FrameObjectCommentsComponent
-          :comments="taskComments"
-          @add="handleAddComment"
-          @delete="handleDeleteComment"
-      />
-      <DeleteModal
-          :show="showDeleteModal"
-          title="Удаление комментария"
-          text="Вы уверены, что хотите удалить этот комментарий?"
-          @close="closeDeleteModal"
-          @confirm="confirmDeleteComment"
+  <FrameWrapperComponent>
+    <div class="object-wrapper-component">
+      <div class="object-item-component">
+        <FrameObjectContentDescriptionComponent
+            :description = task?.description
+            @save="updateTaskDescription"
+        />
+        <FrameObjectCommentsComponent
+            :comments="taskComments"
+            @add="handleAddComment"
+            @delete="handleDeleteComment"
+        />
+        <DeleteModal
+            :show="showDeleteModal"
+            title="Удаление комментария"
+            text="Вы уверены, что хотите удалить этот комментарий?"
+            @close="closeDeleteModal"
+            @confirm="confirmDeleteComment"
+        />
+      </div>
+      <FrameObjectInfoPanelComponent
+          class="object-info-panel"
+          :fields="taskConfig"
+          :data="task"
+          @update:field="handleFieldUpdate"
       />
     </div>
-    <FrameObjectInfoPanelComponent
-        class="object-info-panel"
-        :fields="taskConfig"
-        :data="task"
-        @update:field="handleFieldUpdate"
-    />
-  </div>
+  </FrameWrapperComponent>
 </template>
 <script setup lang="ts">
 import { ref,onMounted } from 'vue'
 import axios from 'axios'
+import FrameWrapperComponent from "../../../components/frame/FrameWrapperComponent.vue"
 import FrameObjectContentDescriptionComponent from '@/components/frame/FrameObjectContentDescriptionComponent.vue'
 import FrameObjectCommentsComponent from '@/components/frame/FrameObjectCommentsComponent.vue'
 import FrameObjectInfoPanelComponent from '@/components/frame/FrameObjectInfoPanelComponent.vue'
@@ -43,7 +46,9 @@ import { buildCommentTree, addCommentToTree } from '@/utils/commentUtils'
 import type { Task } from '@/types/task'
 import type { Comment } from '@/types/comment'
 import {deleteCommentFromTree} from "../../../utils/commentUtils";
+import { useToast } from '@/utils/ToastUtils'
 
+const toast = useToast()
 const authStore = useAuthStore()
 const showDeleteModal = ref(false)
 const taskComments = ref<Comment[]>([])
@@ -99,8 +104,10 @@ const handleFieldUpdate = async ({ key, value }: { key: string, value: any }) =>
       dataToSend[key] = value
     }
     await axios.patch(`/api/tasks/${props.task.id}`, dataToSend)
+    toast.success('Поле успешно обновлено')
   } catch (error) {
-    console.error(`Ошибка при сохранении поля ${error}`)
+    console.log(error)
+    toast.error(`Ошибка`)
     ;(props.task as any)[key] = oldValue
   }
 }
@@ -113,8 +120,10 @@ const updateTaskDescription = async (newDescription: string) => {
       description: newDescription
     })
     props.task.description = response.data.description
+    toast.success('Описание успешно обновлено')
   } catch (error) {
-    console.error('Ошибка при сохранении:', error)
+    console.log(error)
+    toast.error(`Ошибка`)
   }
 }
 
@@ -126,14 +135,20 @@ const handleDeleteComment = (id: number) => {
 }
 
 const handleAddComment = async (text: string, parentId?: number ) => {
-  const response = await axios.post(`/api/task-comments`, {
-    taskId: props.task.id,
-    message: text,
-    replyId: parentId || null
-  }, {
-    params: { userId: authStore.userId }
-  })
-  addCommentToTree(taskComments.value, response.data, authStore.fullName || `Пользователь ${authStore.userId}`, parentId)
+  try{
+    const response = await axios.post(`/api/task-comments`, {
+      taskId: props.task.id,
+      message: text,
+      replyId: parentId || null
+    }, {
+      params: { userId: authStore.userId }
+    })
+    addCommentToTree(taskComments.value, response.data, authStore.fullName || `Пользователь ${authStore.userId}`, parentId)
+    toast.success('Описание успешно обновлено')
+  } catch (error) {
+    console.log(error)
+    toast.error(`Ошибка`)
+  }
 }
 
 const fetchComments = async() =>{
@@ -143,7 +158,8 @@ const fetchComments = async() =>{
     })
     taskComments.value = buildCommentTree(response.data)
   } catch (error) {
-    console.error('Ошибка при загрузке комментариев:', error)
+    console.log(error)
+    toast.error(`Ошибка`)
   }
 }
 
@@ -154,8 +170,10 @@ const confirmDeleteComment = async() => {
     await axios.delete(`/api/task-comments/${id}`)
     deleteCommentFromTree(taskComments.value, id)
     closeDeleteModal()
+    toast.success('Комментарий успешно удален')
   } catch (error) {
-    console.error('Ошибка при удалении комментария:', error)
+    console.log(error)
+    toast.error(`Ошибка`)
   }
 }
 
@@ -163,7 +181,6 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false
   currentCommentId.value = null
 }
-
 
 onMounted(() => {
   currentTaskName.value = props.task.name

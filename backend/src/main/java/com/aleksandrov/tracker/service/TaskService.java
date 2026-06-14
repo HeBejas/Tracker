@@ -101,4 +101,9 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Задача с id " + id + " не найдена"));
+        taskRepository.delete(task);
+    }
 }
