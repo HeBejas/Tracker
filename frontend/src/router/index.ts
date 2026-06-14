@@ -28,7 +28,6 @@ const routes = [
         component: () => import('../pages/workspace/DashboardPage.vue'),
         meta: { breadcrumb: 'Дашборд' }
       },
-
       // Вложенная структура для проектов
       {
         path: 'projects',
@@ -121,7 +120,49 @@ const routes = [
         name: 'WorkspaceSettings',
         component: () => import('../pages/workspace/WorkspaceSettings.vue'),
         meta: { breadcrumb: 'Настройки' }
-      }
+      },
+      {
+        path: 'tasks',
+        component: RouterView,
+        meta: { breadcrumb: 'Задачи' },
+        children: [
+          {
+            path: '',
+            name: 'TasksPage', // Страница со списком всех задач
+            component: () => import('../pages/workspace/TasksList.vue'),
+          },
+          {
+            path: ':taskId',
+            component: () => import('../pages/workspace/task/TaskLayout.vue'),
+            meta: {
+              breadcrumb: (route: RouteLocationNormalized) => {
+                return currentTaskName.value || `Задача #${route.params.taskId}`
+              },
+              showChildTabs: true
+            },
+            children: [
+              {
+                path: '',
+                name: 'WorkspaceTaskPage',
+                component: () => import('../pages/workspace/task/TaskPage.vue'),
+                meta: { breadcrumb: 'О задаче' }
+              },
+              {
+                path: 'settings',
+                name: 'WorkspaceTaskSettings',
+                component: () => import('../pages/workspace/task/TaskSettings.vue'),
+                meta: { breadcrumb: 'Настройки' }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'employees',
+        name: 'EmployeesList',
+        component: () => import('../pages/workspace/EmployeesList.vue'),
+        meta: { breadcrumb: 'Сотрудники' }
+      },
     ]
   },
   {
@@ -152,7 +193,7 @@ const routes = [
             children: [
               {
                 path: '',
-                redirect: (to: RouteLocation) => `/admin/workspaces/${to.params.id}/dashboard`,
+                redirect: (to: RouteLocation) => `/admin/workspaces/${to.params.id}/projects`,
 
               },
               {

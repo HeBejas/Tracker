@@ -31,6 +31,23 @@ public class TaskService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
 
+    public List<Map<String, Object>> getTasksByWorkspace(Long workspaceId) {
+        List<Task> tasks = taskRepository.findByProject_Workspace_Id(workspaceId);
+
+        return tasks.stream().map(task -> {
+            Map<String, Object> map = new java.util.HashMap<>();
+            map.put("id", task.getId());
+            map.put("name", task.getName());
+            map.put("projectId", task.getProject().getId());
+            map.put("projectName", task.getProject().getName());
+            map.put("statusId", task.getStatus().getId());
+            map.put("priorityId", task.getPriority().getId());
+            map.put("deadlineDate", task.getDeadlineDate());
+            map.put("createdAt", task.getCreatedAt());
+            return map;
+        }).toList();
+    }
+
     public List<Task> getTasksByProject(Long projectId) {
         return taskRepository.findByProject_Id(projectId);
     }

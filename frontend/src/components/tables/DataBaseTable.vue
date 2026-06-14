@@ -7,6 +7,9 @@
           placeholder="Поиск по всем полям..."
           class="form-input"
       />
+      <div class="actions-slot">
+        <slot name="action"></slot>
+      </div>
     </div>
 
     <div v-if="isLoading" class="loading-state">

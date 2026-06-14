@@ -1,7 +1,8 @@
 <template>
-    <AdminHeaderComponent title="Список сотрудников">
-      <button class="action-btn primary" @click="showCreateModal = true">Пригласить сотрудника</button>
-    </AdminHeaderComponent>
+  <FrameWrapperComponent>
+    <FrameHeaderComponent>
+      Сотрудники
+    </FrameHeaderComponent>
 
     <DataBaseTable
         :columns="userColumns"
@@ -11,109 +12,132 @@
         @inspect="onInspect"
         @edit="onEdit"
         @delete="onDelete"
-    />
+    >
+      <template #action>
+        <CreateButton @click="showCreateModal = true">
+          Пригласить сотрудника
+        </CreateButton>
+      </template>
+    </DataBaseTable>
 
-    <InspectModal
-        :show="showInspectModal"
-        :title="`Просмотр профиля «${selectedUser?.fullName}»`"
-        :data="selectedUser"
-        :fields="userColumns"
-        @close="showInspectModal = false"
-    />
+  </FrameWrapperComponent>
 
-    <CreateModal
-        :show="showCreateModal"
-        title="Добавить сотрудника"
-        :fields="userFormFields"
-        submitLabel="Добавить"
-        @close="showCreateModal = false"
-        @submit="onCreate"
-    />
+  <InspectModal
+      :show="showInspectModal"
+      :title="`Просмотр профиля «${selectedUser?.fullName}»`"
+      :data="selectedUser"
+      :fields="userColumns"
+      @close="showInspectModal = false"
+  />
 
-    <DeleteModal
-        :show="showDeleteModal"
-        title="Удаление сотрудника"
-        :message="`Вы уверены, что хотите убрать пользователя «${selectedUser?.fullName}» из воркспейса?`"
-        @close="showDeleteModal = false"
-        @confirm="onDeleteConfirm"
-    />
+  <CreateModal
+      :show="showCreateModal"
+      title="Добавить сотрудника"
+      :fields="userFormFields"
+      submitLabel="Добавить"
+      @close="showCreateModal = false"
+      @submit="onCreate"
+  />
 
-    <EditModal
-        :show="showEditModal"
-        :title="`Изменить данные «${selectedUser?.fullName}»`"
-        :fields="userFormFields"
-        :data="selectedUser"
-        @close="showEditModal = false"
-        @submit="onUpdate"
-    />
+  <DeleteModal
+      :show="showDeleteModal"
+      title="Удаление сотрудника"
+      :text="`Вы уверены, что хотите убрать пользователя «${selectedUser?.fullName}» из воркспейса?`"
+      @close="showDeleteModal = false"
+      @confirm="onDeleteConfirm"
+  />
 
+  <EditModal
+      :show="showEditModal"
+      :title="`Изменить данные «${selectedUser?.fullName}»`"
+      :fields="userFormFields"
+      :data="selectedUser"
+      @close="showEditModal = false"
+      @submit="onUpdate"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
-import { useAuthStore } from '../../stores/auth'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/utils/ToastUtils'
 
-import DataBaseTable from "../../components/tables/DataBaseTable.vue";
-import AdminNavHeaderComponent from "../../components/admin/AdminNavHeaderComponent.vue";
-import AdminHeaderComponent from "../../components/admin/AdminHeaderComponent.vue";
-import AdminWrapperComponent from "../../components/admin/AdminWrapperComponent.vue";
+import FrameWrapperComponent from '@/components/frame/FrameWrapperComponent.vue'
+import FrameHeaderComponent from '@/components/frame/FrameHeaderComponent.vue'
+import DataBaseTable from '@/components/tables/DataBaseTable.vue'
+import CreateButton from '@/components/buttons/CreateBtn.vue'
 
-import CreateModal from "../../components/modals/CreateModal.vue";
-import DeleteModal from "../../components/modals/DeleteModal.vue"
-import InspectModal from "../../components/modals/InspectModal.vue";
-import EditModal from "../../components/modals/EditModal.vue";
+import CreateModal from '@/components/modals/CreateModal.vue'
+import DeleteModal from '@/components/modals/DeleteModal.vue'
+import InspectModal from '@/components/modals/InspectModal.vue'
+import EditModal from '@/components/modals/EditModal.vue'
 
+const route = useRoute()
 const authStore = useAuthStore()
-const adminLinks = [
-  '/admin/workspaces',
-  '/admin/users',
-  '/admin/tariffs'
-]
-
-const props = defineProps<{
-  workspaceId: number
-}>()
+const toast = useToast()
 
 const users = ref<any[]>([])
 const selectedUser = ref<any>(null)
-
 const projectOptions = ref<any[]>([])
 const isLoading = ref(true)
 
+// Управление состоянием модальных окон
+const showCreateModal = ref(false)
+const showDeleteModal = ref(false)
+const showInspectModal = ref(false)
+const showEditModal = ref(false)
 
 const userColumns: any = [
-  { key: 'id', label: 'ID' },
-  { key: 'fullName', label: 'ФИО' },
-  { key: 'email', label: 'Email' },
-  { key: 'role', label: 'Роль' },
-  { key: 'project', label: 'Закрепленный проект' }
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'fullName', label: 'ФИО', sortable: true, filterable: true },
+  { key: 'email', label: 'Email', filterable: true },
+  { key: 'role', label: 'Роль', filterable: true },
+  { key: 'project', label: 'Закрепленный проект', filterable: true }
 ]
 
-const transformUser = (user: any ) => ({
+const userFormFields: any = computed(() => [
+  { key: 'fullName', label: 'ФИО сотрудника', type: 'text', placeholder: 'Иванов Иван' },
+  { key: 'email', label: 'Электронная почта', type: 'text', placeholder: 'example@tracker.com' },
+  {
+    key: 'role',
+    label: 'Тип доступа (Роль)',
+    type: 'select',
+    options: [
+      { value: 2, label: 'Менеджер' },
+      { value: 3, label: 'Сотрудник' }
+    ]
+  }
+  // ,
+  // {
+  //   key: 'projectId',
+  //   label: 'Закрепить за проектом (для Сотрудника)',
+  //   type: 'select',
+  //   options: projectOptions.value
+  // }
+])
+
+const transformUser = (user: any) => ({
   ...user,
   role: user.role?.name || '—',
   project: user.project?.name || 'Все проекты'
 })
 
 const fetchEmployees = async () => {
+  const workspaceId = route.params.id
+  if (!workspaceId) return
+
   try {
     isLoading.value = true
 
-    const usersResponse = await axios.get(`/api/workspaces/${props.workspaceId}/users`)
+    const usersResponse = await axios.get(`/api/workspaces/${workspaceId}/users`)
     const userData = usersResponse.data
+    users.value = Array.isArray(userData) ? userData.map(transformUser) : [transformUser(userData)]
 
-    users.value = Array.isArray(userData)
-        ? userData.map(transformUser)
-        : [transformUser(userData)]
-
-    const projectsResponse = await axios.get(`/api/workspaces/${props.workspaceId}/projects`)
-    projectOptions.value = projectsResponse.data.map((p: any) => ({
-      value: p.id,
-      label: p.name
-    }))
   } catch (error) {
-    console.error('Ошибка при загрузке данных:', error)
+    console.error(`Ошибка при загрузке данных: ${error}`)
+    toast.error('Не удалось загрузить список сотрудников')
   } finally {
     isLoading.value = false
   }
@@ -123,87 +147,77 @@ onMounted(() => {
   fetchEmployees()
 })
 
-const showCreateModal = ref(false)
-const showDeleteModal = ref(false)
-const showInspectModal = ref(false)
-const showEditModal = ref(false)
-
-const userFormFields: any = computed(() => [
-  { key: 'fullName', label: 'ФИО сотрудника', type: 'text', placeholder: 'Иванов Иван' },
-  { key: 'email', label: 'Электронная почта', type: 'text', placeholder: 'example@tracker.com' },
-  {
-    key: 'roleId',
-    label: 'Тип доступа (Роль)',
-    type: 'select',
-    options: [
-      { value: 2, label: 'Менеджер' },
-      { value: 3, label: 'Сотрудник' }
-    ]
-  }
-])
-
-const onInspect = async (user: any ) => {
+// Обработчики таблицы
+const onInspect = (user: any) => {
   selectedUser.value = user
   showInspectModal.value = true
 }
 
-const onEdit = (user: any ) => {
+const onEdit = (user: any) => {
   selectedUser.value = user
   showEditModal.value = true
 }
 
-const onDelete = async (user: any ) => {
+const onDelete = (user: any) => {
   selectedUser.value = user
   showDeleteModal.value = true
 }
 
-const onCreate = async (formData: any ) => {
-  console.log(props.workspaceId)
+// CRUD операции
+const onCreate = async (formData: any) => {
+  const workspaceId = route.params.id
+
   try {
     let response
     const basePayload = {
       email: formData.email,
       fullName: formData.fullName,
-      workspaceId: props.workspaceId,
-      // inviterId: authStore.user?.id || 1 // Тот, кто создает
-      inviterId: 4
+      workspaceId: Number(workspaceId),
+      inviterId: authStore.userId
     }
 
     if (formData.roleId === 2) {
       response = await axios.post('/api/auth/invite/manager', basePayload)
     } else {
-      // Проверяем, выбрал ли админ проект для работяги
       // if (!formData.projectId) {
-      //   alert('Ошибка: Для роли "Сотрудник" обязательно нужно выбрать проект!')
+      //   toast.error('Для роли "Сотрудник" необходимо выбрать проект!')
       //   return
       // }
-      // Стучимся на ручку Сотрудника
       response = await axios.post('/api/auth/invite/employee', {
         ...basePayload,
         projectId: formData.projectId
       })
     }
 
+    // Оставляем обычный alert, так как тост слишком быстро исчезнет
+    // и пользователь не успеет скопировать временный пароль
     alert(`Пользователь успешно добавлен!\n\nEmail: ${response.data.email}\nВременный пароль: ${response.data.rawPassword}`)
 
     showCreateModal.value = false
-    await fetchEmployees() // Перезагружаем список
+    await fetchEmployees()
   } catch (error: any) {
-    alert(error.response?.data || 'Ошибка при создании инвайта')
+    console.error(`Ошибка при создании инвайта: ${error}`)
+    toast.error(error.response?.data || 'Не удалось пригласить сотрудника')
   }
 }
 
 const onDeleteConfirm = async () => {
+  if (!selectedUser.value) return
+
   try {
     await axios.delete(`/api/users/${selectedUser.value.id}`)
     users.value = users.value.filter(u => u.id !== selectedUser.value.id)
     showDeleteModal.value = false
+    toast.success('Сотрудник успешно удален')
   } catch (error) {
-    alert('Ошибка при удалении сотрудника')
+    console.error(`Ошибка при удалении: ${error}`)
+    toast.error('Не удалось удалить сотрудника')
   }
 }
 
-const onUpdate = async (data: any ) => {
+const onUpdate = async (data: any) => {
+  if (!selectedUser.value) return
+
   try {
     const response = await axios.put(`/api/users/${selectedUser.value.id}`, data)
     const index = users.value.findIndex(u => u.id === selectedUser.value.id)
@@ -211,8 +225,10 @@ const onUpdate = async (data: any ) => {
       users.value[index] = transformUser(response.data)
     }
     showEditModal.value = false
+    toast.success('Данные сотрудника обновлены')
   } catch (error) {
-    console.error('Ошибка при обновлении профиля:', error)
+    console.error(`Ошибка при обновлении: ${error}`)
+    toast.error('Не удалось обновить профиль')
   }
 }
 </script>

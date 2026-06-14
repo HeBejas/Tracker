@@ -18,6 +18,12 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    @GetMapping("/workspace")
+    public ResponseEntity<List<Map<String, Object>>> getTasksByWorkspace(@RequestParam Long workspaceId) {
+        List<Map<String, Object>> tasks = taskService.getTasksByWorkspace(workspaceId);
+        return ResponseEntity.ok(tasks);
+    }
+
     @GetMapping
     public ResponseEntity<List<Task>> getTasksByProject(@RequestParam Long projectId) {
         List<Task> tasks = taskService.getTasksByProject(projectId);

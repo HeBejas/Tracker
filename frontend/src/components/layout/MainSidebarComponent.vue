@@ -39,10 +39,10 @@
       </nav>
 
       <div class="action-container">
-        <button class="create-btn" v-if="authStore.userRole !== 'admin'"  :class="{ 'btn-collapsed': isCollapsed }">
-          <span v-if="!isCollapsed">+ Создать задачу</span>
-          <span v-else>+</span>
-        </button>
+<!--        <button class="create-btn" v-if="authStore.userRole !== 'admin'"  :class="{ 'btn-collapsed': isCollapsed }">-->
+<!--          <span v-if="!isCollapsed">+ Создать задачу</span>-->
+<!--          <span v-else>+</span>-->
+<!--        </button>-->
       </div>
     </div>
 
@@ -107,15 +107,16 @@ const menuItems = computed(() => {
   if (authStore.isAdmin) {
     return [
       { to: '/admin/', label: 'Администрирование', icon: '🛡️' },
-      { to: '/admin/workspaces', label: 'Воркспейсы', icon: '📁️' },
-      { to: '/admin/users', label: 'Пользователи', icon: '👥' },
-      { to: '/admin/tariffs', label: 'Тарифы', icon: '💰' }
+      // { to: '/admin/workspaces', label: 'Воркспейсы', icon: '📁️' },
+      // { to: '/admin/users', label: 'Пользователи', icon: '👥' },
+      // { to: '/admin/tariffs', label: 'Тарифы', icon: '💰' }
     ]
   }
   return [
-    { to: `/workspaces/${workspaceId.value}/dashboard`, label: 'Дашборд', icon: '📋' },
     { to: `/workspaces/${workspaceId.value}/projects`, label: 'Проекты', icon: '📁' },
     { to: `/workspaces/${workspaceId.value}/employees`, label: 'Сотрудники', icon: '👥' },
+    { to: `/workspaces/${workspaceId.value}/tasks`, label: 'Задачи', icon: '📌' },
+    // { to: `/workspaces/${workspaceId.value}/dashboard`, label: 'Дашборд', icon: '📋' },
     { to: `/workspaces/${workspaceId.value}/reports`, label: 'Отчеты', icon: '📊' }
   ]
 })

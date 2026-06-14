@@ -58,7 +58,8 @@ const output_columns: TableColumn[] = [
       { value: 1, label: 'Новая' },
       { value: 2, label: 'В работе' },
       { value: 3, label: 'На проверке' },
-      { value: 4, label: 'Завершена' }
+      { value: 4, label: 'Завершена' },
+      { value: 5, label: 'Отменена' },
     ]
   },
   {
@@ -69,7 +70,8 @@ const output_columns: TableColumn[] = [
     options: [
       { value: 1, label: 'Низкий' },
       { value: 2, label: 'Средний' },
-      { value: 3, label: 'Высокий' }
+      { value: 3, label: 'Высокий' },
+      { value: 4, label: 'Критичный' },
     ]
   },
   { key: 'authorId', label: 'Автор', type: 'number', sortable: true, filterable: false },
