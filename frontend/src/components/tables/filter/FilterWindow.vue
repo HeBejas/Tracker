@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { TableColumn } from './TableComponent.vue'
+import type { TableColumn } from '@/components/tables/TableComponent.vue'
 
 const props = defineProps<{
   column: TableColumn

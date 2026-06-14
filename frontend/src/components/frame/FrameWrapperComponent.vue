@@ -10,9 +10,6 @@
 </script>
 
 <style scoped>
-.frame-wrapper {
-  //padding-top: 1rem;
-}
 .frame{
   display: flex;
   flex-direction: column;

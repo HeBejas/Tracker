@@ -3,7 +3,7 @@
     <div class="object-wrapper-component">
       <div class="object-item-component">
         <FrameObjectContentDescriptionComponent
-          :description = project?.description
+            :description="project?.description ?? ''"
           @save="updateProjectDescription"
         />
         <FrameObjectCommentsComponent
@@ -40,6 +40,7 @@ import DeleteModal from '@/components/modals/DeleteModal.vue'
 
 import { buildCommentTree, addCommentToTree } from '@/utils/commentUtils'
 
+import type { PanelFieldConfig } from '@/types/panel'
 import type { Project } from '@/types/project'
 import type { Comment } from '@/types/comment'
 import { useAuthStore } from '@/stores/auth'

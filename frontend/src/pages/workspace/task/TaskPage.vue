@@ -3,7 +3,7 @@
     <div class="object-wrapper-component">
       <div class="object-item-component">
         <FrameObjectContentDescriptionComponent
-            :description = task?.description
+            :description="task?.description ?? ''"
             @save="updateTaskDescription"
         />
         <FrameObjectCommentsComponent
@@ -45,6 +45,7 @@ import { buildCommentTree, addCommentToTree } from '@/utils/commentUtils'
 
 import type { Task } from '@/types/task'
 import type { Comment } from '@/types/comment'
+import type { PanelFieldConfig } from '@/types/panel'
 import {deleteCommentFromTree} from "../../../utils/commentUtils";
 import { useToast } from '@/utils/ToastUtils'
 

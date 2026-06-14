@@ -66,7 +66,6 @@ const handleChangePassword = async (data: { oldPassword: string; newPassword: st
   justify-content: center;
   gap: 8px;
   padding: 10px 20px;
-  /* Синий цвет в стиль аватара на странице профиля */
   background-color: #2563eb;
   color: #ffffff;
   border: 1px solid transparent;
@@ -76,7 +75,7 @@ const handleChangePassword = async (data: { oldPassword: string; newPassword: st
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
   transition: all 0.2s ease;
-  width: 100%; /* Занимает всю доступную ширину во флексе */
+  width: 100%;
 }
 .change-password-btn:hover {
   background-color: #1d4ed8;

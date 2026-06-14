@@ -23,20 +23,19 @@
 import { ref, reactive } from 'vue';
 import axios from 'axios';
 
-// Узнаем, кто открыл страницу
 const currentUserRole = ref(localStorage.getItem('role'));
 
 const form = reactive({
   username: '',
   password: '',
-  role: 'PERFORMER' // По умолчанию
+  role: 'PERFORMER'
 });
 
 const message = ref('');
 
 const submitForm = async () => {
   try {
-    // Передаем JWT токен в заголовке для авторизации на бэкенде
+
     const token = localStorage.getItem('token');
     await axios.post('/api/users', form, {
       headers: { 'Authorization': `Bearer ${token}` }

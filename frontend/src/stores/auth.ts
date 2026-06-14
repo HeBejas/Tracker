@@ -21,13 +21,13 @@ export const useAuthStore = defineStore('auth', {
             this.userRole = String(userRole)
             this.fullName = fullName
             this.email = email
-            this.workspaceId = workspaceId || null
+            this.workspaceId = workspaceId !== null ? String(workspaceId) : null
             localStorage.setItem('token', token)
             localStorage.setItem('userRole', userRole)
             localStorage.setItem('userId', String(userId))
             localStorage.setItem('fullName', fullName)
             localStorage.setItem('email', email)
-            localStorage.setItem('workspaceId', workspaceId)
+            localStorage.setItem('workspaceId', String(workspaceId))
 
             if (workspaceId) {
                 localStorage.setItem('workspaceId', String(workspaceId))

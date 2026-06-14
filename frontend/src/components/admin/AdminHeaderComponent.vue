@@ -25,8 +25,5 @@ defineProps<{
 </style>
 
 
-<!--.header-actions h2 { margin: 0; font-size: 1.5rem; color: #0f172a; }-->
-
-
 
 

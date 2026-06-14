@@ -36,7 +36,7 @@
     <DeleteModal
         :show="showDeleteModal"
         title="Удаление тарифа"
-        :message="`Вы уверены, что хотите удалить тариф «${selectedTariff?.name}»?`"
+        :text="`Вы уверены, что хотите удалить тариф «${selectedTariff?.name}»?`"
         @close="showDeleteModal = false"
         @confirm="onDeleteConfirm"
     />

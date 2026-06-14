@@ -28,7 +28,7 @@
     <DeleteModal
         :show="showDeleteModal"
         title="Удаление рабочей среды"
-        :message="`Вы уверены, что хотите удалить рабочую среду ${selectedWorkspace?.id}?`"
+        :text="`Вы уверены, что хотите удалить рабочую среду ${selectedWorkspace?.id}?`"
         @close="showDeleteModal = false"
         @confirm="onDeleteConfirm"
     />

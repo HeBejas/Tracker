@@ -34,7 +34,7 @@ const resolvedLinks = computed(() => {
 
         return {
           path: linkRecord.fullPath,
-          label: child.meta.breadcrumb as string
+          label: (child.meta?.breadcrumb as string) || ''
         }
       })
 })
@@ -50,6 +50,5 @@ const navigate = (path: string) => {
   gap: 30px;
   padding-bottom: 0;
   border-bottom: 2px solid #e2e8f0;
-  //margin-bottom: 24px;
 }
 </style>

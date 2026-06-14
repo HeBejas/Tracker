@@ -23,7 +23,6 @@
       text="Вы уверены, что хотите создать новую задачу?"
       submitLabel="Создать"
       @close="showSubmitModal = false"
-      @submit="handleCreateNewTask"
   />
 </template>
 

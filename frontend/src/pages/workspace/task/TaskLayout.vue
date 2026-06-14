@@ -18,10 +18,11 @@ import FrameHeaderComponent from "../../../components/frame/FrameHeaderComponent
 import FrameWrapperComponent from "../../../components/frame/FrameWrapperComponent.vue";
 import { currentProjectName } from '@/router/index'
 import { currentTaskName } from '@/router/index'
+import type { Task } from '@/types/task'
 
 const route = useRoute()
 const router = useRouter()
-const task = ref<Project>()
+const task = ref<Task>()
 
 const fetchTask = async () => {
   try {

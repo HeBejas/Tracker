@@ -1,4 +1,4 @@
-import type { Comment } from '@/types/comments'
+import type { Comment } from '@/types/comment'
 
 export const findCommentById = (comments: Comment[], id: number): Comment | undefined => {
     for (const comment of comments) {
@@ -20,7 +20,10 @@ export const addCommentToTree = (
 ) => {
     const newComment: Comment = {
         id: savedComment.id,
-        author: { name: authorName },
+        author: {
+            id: savedComment.userId || savedComment.authorId || 0,
+            name: authorName
+        },
         text: savedComment.message,
         createdAt: savedComment.createdAt,
         replies: []
@@ -49,7 +52,7 @@ export const buildCommentTree = (flatComments: any[]): Comment[] => {
                 name: c.authorName || `Пользователь ${c.userId}`
             },
             text: c.message,
-            createdAt: c.createdAt, // Форматировать дату будем уже в шаблоне HTML!
+            createdAt: c.createdAt,
             replies: []
         }
 
@@ -67,12 +70,17 @@ export const buildCommentTree = (flatComments: any[]): Comment[] => {
 
 export const deleteCommentFromTree = (comments: Comment[], targetId: number): boolean => {
     for (let i = 0; i < comments.length; i++) {
-        if (comments[i].id === targetId) {
+        const comment = comments[i]
+        if (!comment) continue
+
+        if (comment.id === targetId) {
             comments.splice(i, 1)
             return true
         }
-        if (comments[i].replies && comments[i].replies.length > 0) {
-            const isDeleted = deleteCommentFromTree(comments[i].replies, targetId)
+
+        const replies = comment.replies
+        if (replies && replies.length > 0) {
+            const isDeleted = deleteCommentFromTree(replies, targetId)
             if (isDeleted) return true
         }
     }

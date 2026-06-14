@@ -34,7 +34,7 @@
     <DeleteModal
         :show="showDeleteModal"
         title="Удаление пользователя"
-        :message="`Вы уверены, что хотите удалить пользователя «${selectedUser?.fullName}»?`"
+        :text="`Вы уверены, что хотите удалить пользователя «${selectedUser?.fullName}»?`"
         @close="showDeleteModal = false"
         @confirm="onDeleteConfirm"
     />

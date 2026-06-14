@@ -257,12 +257,12 @@ router.beforeEach((to, from) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return '/login'
   } else if (to.path === '/login' && authStore.isAuthenticated) {
-    if (authStore.userRoleId === 1) {
+    if (Number(authStore.userRole) === 1) {
       return '/admin/workspaces'
     }
-    return `/workspaces/${authStore.userWorkspaceId}/dashboard`
-  } else if (to.meta.requiresAdmin && authStore.userRoleId !== 1) {
-    return `/workspaces/${authStore.userWorkspaceId}/dashboard`
+    return `/workspaces/${authStore.workspaceId}/dashboard`
+  } else if (to.meta.requiresAdmin && Number(authStore.userRole) !== 1) {
+    return `/workspaces/${authStore.workspaceId}/dashboard`
   }
 })
 
