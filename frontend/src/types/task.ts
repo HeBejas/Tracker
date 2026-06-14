@@ -4,7 +4,7 @@ export interface Task {
     parentTaskId: number | null;
     authorId: number;
     statusId: number;
-    priority_id: number;
+    priorityId: number;
     name: string;
     description: string | null;
     deadlineDate: string | null;

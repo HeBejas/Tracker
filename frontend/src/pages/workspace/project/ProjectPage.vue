@@ -35,7 +35,6 @@ import FrameObjectCommentsComponent from '@/components/frame/FrameObjectComments
 import FrameObjectInfoPanelComponent from '@/components/frame/FrameObjectInfoPanelComponent.vue'
 import DeleteModal from '@/components/modals/DeleteModal.vue'
 
-import { formatUIDate } from '@/utils/dateUtils'
 import { buildCommentTree, addCommentToTree } from '@/utils/commentUtils'
 
 import type { Project } from '@/types/project'
@@ -130,8 +129,6 @@ const fetchComments = async() =>{
 onMounted(() => {
   fetchComments()
 })
-
-// Модалки
 
 const closeDeleteModal = () => {
   showDeleteModal.value = false
