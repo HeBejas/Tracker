@@ -1,8 +1,10 @@
 export interface Task {
     id: number;
     projectId: number;
+    projectName: string;
     parentTaskId: number | null;
     authorId: number;
+    authorName: string;
     statusId: number;
     priorityId: number;
     name: string;

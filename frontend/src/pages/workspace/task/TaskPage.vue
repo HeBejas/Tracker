@@ -62,6 +62,7 @@ const route = useRoute()
 //Панель информации
 const taskConfig: PanelFieldConfig[] = [
   { key: 'name', label: 'Название', type: 'text' },
+  { key: 'projectName', label: 'Проект', type: 'text', sortable: true, filterable: true, readonly: true },
   {
     key: 'statusId',
     label: 'Статус',
@@ -83,8 +84,8 @@ const taskConfig: PanelFieldConfig[] = [
       { value: 4, label: 'Критичный' },
     ]
   },
-  { key: 'authorId', label: 'Автор', type: 'number', sortable: true, filterable: false },
-  // { key: 'authorName', label: 'Автор', type: 'text', sortable: true, filterable: true },
+  // { key: 'authorId', label: 'Автор', type: 'number', sortable: true, filterable: false },
+  { key: 'authorName', label: 'Автор', type: 'text', sortable: true, filterable: true, readonly: true },
   { key: 'deadlineDate', label: 'Дедлайн', type: 'date' },
   { key: 'completedAt', label: 'Дата завершения', type: 'date', readonly: true },
   { key: 'createdAt', label: 'Создана', type: 'date', readonly: true },
@@ -185,5 +186,6 @@ const closeDeleteModal = () => {
 onMounted(() => {
   currentTaskName.value = props.task.name
   fetchComments()
+  console.log(props.task)
 })
 </script>

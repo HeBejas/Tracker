@@ -1,8 +1,10 @@
 package com.aleksandrov.tracker.controller;
 
+import com.aleksandrov.tracker.dto.CreateTaskDto;
+import com.aleksandrov.tracker.dto.TaskResponseDto;
+
 import com.aleksandrov.tracker.model.Task;
 import com.aleksandrov.tracker.service.TaskService;
-import com.aleksandrov.tracker.dto.CreateTaskDto;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -25,14 +27,14 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> getTasksByProject(@RequestParam Long projectId) {
-        List<Task> tasks = taskService.getTasksByProject(projectId);
+    public ResponseEntity<List<TaskResponseDto>> getTasksByProject(@RequestParam Long projectId) {
+        List<TaskResponseDto> tasks = taskService.getTasksByProject(projectId);
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        Task task = taskService.getTaskById(id);
+    public ResponseEntity<TaskResponseDto> getTaskById(@PathVariable Long id) {
+        TaskResponseDto task = taskService.getTaskById(id);
         return ResponseEntity.ok(task);
     }
 

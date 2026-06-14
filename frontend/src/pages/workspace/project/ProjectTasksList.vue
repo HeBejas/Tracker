@@ -63,7 +63,7 @@ const output_columns: TableColumn[] = [
     ]
   },
   {
-    key: 'priority_id',
+    key: 'priorityId',
     label: 'Приоритет',
     sortable: true,
     filterable: true,
@@ -74,8 +74,8 @@ const output_columns: TableColumn[] = [
       { value: 4, label: 'Критичный' },
     ]
   },
-  { key: 'authorId', label: 'Автор', type: 'number', sortable: true, filterable: false },
-  // { key: 'authorName', label: 'Автор', type: 'text', sortable: true, filterable: true },
+  // { key: 'authorId', label: 'Автор', type: 'number', sortable: true, filterable: false },
+  { key: 'authorName', label: 'Автор', type: 'text', sortable: true, filterable: true },
   { key: 'deadlineDate', label: 'Дедлайн', type: 'date', sortable: true, filterable: true },
   { key: 'completedAt', label: 'Дата завершения', type: 'date', sortable: true, filterable: true },
   { key: 'createdAt', label: 'Создана', type: 'date', sortable: true, filterable: true },

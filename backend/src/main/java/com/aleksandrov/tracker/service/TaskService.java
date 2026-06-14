@@ -1,6 +1,8 @@
 package com.aleksandrov.tracker.service;
 
 import com.aleksandrov.tracker.dto.CreateTaskDto;
+import com.aleksandrov.tracker.dto.TaskResponseDto;
+
 import com.aleksandrov.tracker.model.Task;
 import com.aleksandrov.tracker.model.TaskStatus;
 import com.aleksandrov.tracker.model.TaskPriority;
@@ -48,13 +50,40 @@ public class TaskService {
         }).toList();
     }
 
-    public List<Task> getTasksByProject(Long projectId) {
-        return taskRepository.findByProject_Id(projectId);
+    public List<TaskResponseDto> getTasksByProject(Long projectId) {
+//        return taskRepository.findByProject_Id(projectId);
+        List<Task> tasks = taskRepository.findByProject_Id(projectId);
+        return tasks.stream().map(task -> TaskResponseDto.builder()
+                .id(task.getId())
+                .name(task.getName())
+                .authorId(task.getAuthor().getId())
+                .authorName(task.getAuthor().getFullName())
+                .projectName(task.getProject().getName())
+                .projectId(task.getProject().getId())
+                .statusId(task.getStatus().getId())
+                .priorityId(task.getPriority().getId())
+                .deadlineDate(task.getDeadlineDate())
+                .createdAt(task.getCreatedAt())
+                .build()
+        ).toList();
     }
 
-    public Task getTaskById(Long id) {
-        return taskRepository.findById(id)
+    public TaskResponseDto getTaskById(Long id) {
+        Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Задача не найдена"));
+
+        return TaskResponseDto.builder()
+                .id(task.getId())
+                .name(task.getName())
+                .authorId(task.getAuthor().getId())
+                .authorName(task.getAuthor().getFullName())
+                .projectName(task.getProject().getName())
+                .projectId(task.getProject().getId())
+                .statusId(task.getStatus().getId())
+                .priorityId(task.getPriority().getId())
+                .deadlineDate(task.getDeadlineDate())
+                .createdAt(task.getCreatedAt())
+                .build();
     }
 
     public Task createTask(CreateTaskDto dto, Long authorId) {
@@ -90,7 +119,8 @@ public class TaskService {
     }
 
     public Task updateTaskFields(Long id, Map<String, Object> updates) {
-        Task task = getTaskById(id);
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Задача не найдена"));
 
         if (updates.containsKey("name")) { task.setName((String) updates.get("name")); }
         if (updates.containsKey("description")) { task.setDescription((String) updates.get("description")); }
