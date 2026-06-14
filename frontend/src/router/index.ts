@@ -5,6 +5,7 @@ import type { RouteLocationNormalized, RouteLocation } from 'vue-router'
 
 import { ref } from 'vue'
 export const currentProjectName = ref('')
+export const currentTaskName = ref('')
 
 const routes = [
   { path: '/', redirect: '/login', meta: { HideLayout: true }},
@@ -41,25 +42,58 @@ const routes = [
           },
           {
             path: ':projectId',
-            component: () => import('../pages/workspace/project/ProjectLayout.vue'),
+            component: RouterView,
             meta: {
               breadcrumb: (route: RouteLocationNormalized) => {
                 return currentProjectName.value || `Проект ${route.params.projectId}`
-              },
-              showChildTabs: true },
+              }
+            },
             children: [
               {
                 path: '',
-                name: 'ProjectPage',
-                component: () => import('../pages/workspace/project/ProjectPage.vue'),
-                meta: { breadcrumb: 'О проекте' }
+                component: () => import('../pages/workspace/project/ProjectLayout.vue'),
+                meta: { showChildTabs: true },
+                children: [
+                  {
+                    path: '',
+                    name: 'ProjectPage',
+                    component: () => import('../pages/workspace/project/ProjectPage.vue'),
+                    meta: { breadcrumb: 'О проекте' }
+                  },
+                  {
+                    path: 'tasks',
+                    name: 'ProjectTasks',
+                    meta: { breadcrumb: 'Задачи' },
+                    component: () => import('../pages/workspace/project/ProjectTasksList.vue')
+                  }
+                ]
               },
               {
                 path: 'tasks',
-                name: 'ProjectTasks',
+                component: RouterView,
                 meta: { breadcrumb: 'Задачи' },
-                component: () => import('../pages/workspace/project/ProjectTasksList.vue')
+                children: [
+                  {
+                    path: ':taskId',
+                    component: () => import('../pages/workspace/task/TaskLayout.vue'),
+                    meta: {
+                      breadcrumb: (route: RouteLocationNormalized) => {
+                        return currentTaskName.value || `Задача #${route.params.taskId}`
+                      },
+                      showChildTabs: true
+                    },
+                    children: [
+                      {
+                        path: '',
+                        name: 'ProjectTaskPage',
+                        component: () => import('../pages/workspace/task/TaskPage.vue'),
+                        meta: { breadcrumb: 'О задаче' }
+                      }
+                    ]
+                  }
+                ]
               }
+
             ]
           }
         ]

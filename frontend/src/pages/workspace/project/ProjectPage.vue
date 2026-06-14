@@ -100,7 +100,6 @@ const updateProjectDescription = async (newDescription: string) => {
   }
 }
 // Комментарии
-
 const handleDeleteComment = (id: number) => {
   currentCommentId.value = id
   showDeleteModal.value = true

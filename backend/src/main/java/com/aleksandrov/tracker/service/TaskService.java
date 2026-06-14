@@ -48,8 +48,14 @@ public class TaskService {
         User author = userRepository.findById(authorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден"));
 
-        Task parent = taskRepository.findById(dto.getParentTaskId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка создания подзадачи"));
+        Task parent = null;
+        if (dto.getParentTaskId() != null) {
+            parent = taskRepository.findById(dto.getParentTaskId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка создания подзадачи"));
+        }
+
+        TaskPriority taskPriority = taskPriorityRepository.findByName(dto.getPriority())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Приоритет '" + dto.getPriority() + "' не найден"));
 
         TaskStatus taskStatus = taskStatusRepository.findByName(dto.getStatus())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Статус '" + dto.getStatus() + "' не найден"));
@@ -60,6 +66,7 @@ public class TaskService {
         task.setProject(project);
         task.setAuthor(author);
         task.setParentTask(parent);
+        task.setPriority(taskPriority);
         task.setStatus(taskStatus);
 
         return taskRepository.save(task);
@@ -70,6 +77,12 @@ public class TaskService {
 
         if (updates.containsKey("name")) { task.setName((String) updates.get("name")); }
         if (updates.containsKey("description")) { task.setDescription((String) updates.get("description")); }
+        if (updates.containsKey("priorityId")) {
+            Long priorityId = Long.valueOf(updates.get("priorityId").toString());
+            TaskPriority priority = taskPriorityRepository.findById(priorityId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Приоритет не найден"));
+            task.setPriority(priority);
+        }
         if (updates.containsKey("statusId")) {
             Long statusId = Long.valueOf(updates.get("statusId").toString());
             TaskStatus status = taskStatusRepository.findById(statusId)

@@ -154,7 +154,11 @@ const processedData = computed(() => {
         @update:search="searchQuery = $event"
         @update-filter="handleFilterUpdate"
         @remove-filter="handleRemoveFilter"
-    />
+    >
+      <template #action v-if="$slots.action">
+        <slot name="action"></slot>
+      </template>
+    </TableHeaderComponent>
 
     <TableBodyComponent
         :columns="columns"

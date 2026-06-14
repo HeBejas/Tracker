@@ -7,5 +7,6 @@ public class CreateTaskDto {
     private String name;
     private Long projectId;
     private Long parentTaskId;
-    private String status = "low";
+    private String priority = "low";
+    private String status = "new";
 }

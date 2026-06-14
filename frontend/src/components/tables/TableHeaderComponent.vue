@@ -1,15 +1,21 @@
 <template>
   <div class="tracker-header">
+    <div class="top-bar">
+      <div class="search-section">
+        <input
+            type="text"
+            :value="searchQuery"
+            @input="emit('update:search', ($event.target as HTMLInputElement).value)"
+            placeholder="Поиск по названию"
+            class="main-search-input"
+        />
+      </div>
 
-    <div class="search-section">
-      <input
-          type="text"
-          :value="searchQuery"
-          @input="emit('update:search', ($event.target as HTMLInputElement).value)"
-          placeholder="Поиск по названию"
-          class="main-search-input"
-      />
+      <div class="action-section" v-if="$slots.action">
+        <slot name="action"></slot>
+      </div>
     </div>
+
 
     <div class="clouds-container">
       <div
@@ -128,6 +134,18 @@ const getCloudText = (key: string) => {
 </script>
 
 <style scoped>
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.search-section {
+  flex-grow: 1;
+}
+
 .tracker-header {
   display: flex;
   flex-direction: column;

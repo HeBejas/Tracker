@@ -1,19 +1,20 @@
 <template>
   <FrameWrapperComponent>
-    <FrameSimpleHeaderComponent>
+    <FrameHeaderComponent>
       Проекты
-      <template #actions>
-        <CreateButton @click="showSubmitModal = true">
-          Создать проект
-        </CreateButton>
-      </template>
-    </FrameSimpleHeaderComponent>
+    </FrameHeaderComponent>
 
       <TableComponent
           :columns="output_columns"
           :data="projects"
           @row-click="handleProjectClick"
-      />
+      >
+        <template #action>
+          <CreateButton @click="showSubmitModal = true">
+            Создать проект
+          </CreateButton>
+        </template>
+      </TableComponent>
   </FrameWrapperComponent>
   <SubmitModal
       :show="showSubmitModal"
@@ -31,7 +32,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import FrameWrapperComponent from '../../components/frame/FrameWrapperComponent.vue'
-import FrameSimpleHeaderComponent from '../../components/frame/FrameSimpleHeaderComponent.vue'
+import FrameHeaderComponent from '../../components/frame/FrameHeaderComponent.vue'
 import TableComponent, { type TableColumn } from '../../components/tables/TableComponent.vue'
 import CreateButton from '../../components/buttons/CreateBtn.vue'
 import SubmitModal from '../../components/modals/SubmitModal.vue'
@@ -78,7 +79,6 @@ const fetchProjects = async () => {
   } catch (error) {
     console.error(`Ошибка при загрузке проектов: ${error}`);
   }
-  console.log(projects.value)
 }
 
 onMounted(() => {
@@ -106,7 +106,7 @@ const handleCreateNewProject = async () => {
     const newProjectId = response.data.id
     handleProjectClick(response.data)
   } catch (error) {
-    console.error('Не удалось создать проект:', error)
+    console.error(`Не удалось создать проект: ${error}`)
   }
 }
 </script>

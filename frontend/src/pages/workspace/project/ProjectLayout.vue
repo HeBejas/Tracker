@@ -1,7 +1,7 @@
 <template>
   <FrameWrapperComponent v-if="project">
 
-    <FrameSimpleHeaderComponent>{{ project.name }}</FrameSimpleHeaderComponent>
+    <FrameHeaderComponent>{{ project.name }}</FrameHeaderComponent>
     <FrameHeaderNavComponent />
       <router-view
           :project="project"
@@ -15,7 +15,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import FrameWrapperComponent from "../../../components/frame/FrameWrapperComponent.vue"
-import FrameSimpleHeaderComponent from "../../../components/frame/FrameSimpleHeaderComponent.vue"
+import FrameHeaderComponent from "../../../components/frame/FrameHeaderComponent.vue"
 import FrameHeaderNavComponent from '../../../components/frame/FrameHeaderNavComponent.vue'
 import type { Project } from '@/types/project'
 import { currentProjectName } from '@/router/index'
