@@ -27,7 +27,7 @@ const project = ref<Project>()
 const fetchProject = async () => {
   try {
     const projectId = route.params.projectId
-    const response = await axios.get(`api/projects/${projectId}`)
+    const response = await axios.get(`/api/projects/${projectId}`)
     project.value = response.data
     currentProjectName.value = response.data.name
     setProjectNameInMeta(response.data.name)

@@ -27,7 +27,7 @@ const task = ref<Task>()
 const fetchTask = async () => {
   try {
     const taskId = route.params.taskId
-    const response = await axios.get(`api/tasks/${taskId}`)
+    const response = await axios.get(`/api/tasks/${taskId}`)
     task.value = response.data
     currentTaskName.value = response.data.name
   } catch (error) {
