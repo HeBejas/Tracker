@@ -20,4 +20,6 @@ public interface TaskParticipantRepository extends JpaRepository<TaskParticipant
         @Param("userId") Long userId,
         @Param("roleId") Long roleId
     );
+    @Query("SELECT p FROM TaskParticipant p WHERE p.user.id = :userId AND p.task.project.workspace.id = :workspaceId")
+    List<TaskParticipant> findByUserIdAndWorkspaceId(@Param("userId") Long userId, @Param("workspaceId") Long workspaceId);
 }

@@ -95,7 +95,7 @@ const handleBlur = () => {
 }
 
 const selectUser = (user: User) => {
-  const roleId = 2 // По умолчанию исполнитель
+  const roleId = 1
   const newParticipant: TaskParticipant = {
     userId: user.id,
     userName: user.fullName,
@@ -145,7 +145,6 @@ onMounted(() => {
   width: 100%;
 }
 
-/* Стилизация под наши pro-input */
 .select-user-input {
   width: 100%;
   padding: 4px 8px;
@@ -153,7 +152,7 @@ onMounted(() => {
   font-size: 14px;
   color: #111827;
   background-color: #ffffff;
-  border: 1px solid #d1d5db; /* Базовый бордер, если не в фокусе */
+  border: 1px solid #d1d5db; 
   border-radius: 6px;
   outline: none;
   font-family: inherit;

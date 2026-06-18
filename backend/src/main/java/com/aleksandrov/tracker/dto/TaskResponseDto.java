@@ -18,5 +18,6 @@ public class TaskResponseDto {
     private Long priorityId;
     private OffsetDateTime deadlineDate;
     private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
     private List<TaskParticipantResponseDto> participants;
 }

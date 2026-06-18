@@ -51,6 +51,7 @@ public class TaskService {
             map.put("priorityId", task.getPriority().getId());
             map.put("deadlineDate", task.getDeadlineDate());
             map.put("createdAt", task.getCreatedAt());
+            map.put("updatedAt", task.getUpdatedAt());
             return map;
         }).toList();
     }
@@ -69,6 +70,7 @@ public class TaskService {
                 .priorityId(task.getPriority().getId())
                 .deadlineDate(task.getDeadlineDate())
                 .createdAt(task.getCreatedAt())
+                .updatedAt(task.getUpdatedAt())
                 .participants(getTaskParticipants(task.getId()))
                 .build()
         ).toList();
@@ -89,6 +91,7 @@ public class TaskService {
                 .priorityId(task.getPriority().getId())
                 .deadlineDate(task.getDeadlineDate())
                 .createdAt(task.getCreatedAt())
+                .updatedAt(task.getUpdatedAt())
                 .participants(getTaskParticipants(task.getId()))
                 .build();
     }
@@ -152,6 +155,7 @@ public class TaskService {
 
             task.setDeadlineDate(localTime);
         }
+
         return taskRepository.save(task);
     }
 
@@ -194,5 +198,28 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Задача с id " + id + " не найдена"));
         taskRepository.delete(task);
+    }
+
+    public List<Map<String, Object>> getMyTasksInWorkspace(Long workspaceId, Long userId) {
+        List<TaskParticipant> participants = taskParticipantRepository.findByUserIdAndWorkspaceId(userId, workspaceId);
+
+        return participants.stream().map(participant -> {
+            Task task = participant.getTask();
+            Map<String, Object> map = new java.util.HashMap<>();
+            
+            map.put("id", task.getId());
+            map.put("name", task.getName());
+            map.put("projectId", task.getProject().getId());
+            map.put("projectName", task.getProject().getName());
+            map.put("statusId", task.getStatus().getId());
+            map.put("priorityId", task.getPriority().getId());
+            map.put("deadlineDate", task.getDeadlineDate());
+            map.put("createdAt", task.getCreatedAt());
+            map.put("updatedAt", task.getUpdatedAt());
+            
+            map.put("roleId", participant.getRoleId());
+            
+            return map;
+        }).toList();
     }
 }

@@ -113,10 +113,11 @@ const menuItems = computed(() => {
     ]
   }
   return [
+    { to: `/workspaces/${workspaceId.value}/dashboard`, label: 'Дашборд', icon: '📋' },
+    { to: `/workspaces/${workspaceId.value}/my-tasks`, label: 'Мои Задачи', icon: '✅' },
     { to: `/workspaces/${workspaceId.value}/projects`, label: 'Проекты', icon: '📁' },
     { to: `/workspaces/${workspaceId.value}/employees`, label: 'Сотрудники', icon: '👥' },
     { to: `/workspaces/${workspaceId.value}/tasks`, label: 'Задачи', icon: '📌' },
-    // { to: `/workspaces/${workspaceId.value}/dashboard`, label: 'Дашборд', icon: '📋' },
     { to: `/workspaces/${workspaceId.value}/reports`, label: 'Отчеты', icon: '📊' }
   ]
 })

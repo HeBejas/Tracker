@@ -135,8 +135,23 @@ const startEditing = (field: PanelFieldConfig) => {
   if (field.readonly || field.type === 'progress-bar' || field.type === 'participants') return
 
   editingField.value = field.key
-  if (field.type === 'date' && props.data[field.key]) {
-    editValue.value = new Date(props.data[field.key]).toISOString().split('T')[0]
+  
+  if (field.type === 'date') {
+    let dateObj: Date;
+    
+    if (props.data[field.key]) {
+      dateObj = new Date(props.data[field.key]);
+    } else {
+      dateObj = new Date(); 
+    }
+    if (!isNaN(dateObj.getTime())) {
+      const tzOffset = dateObj.getTimezoneOffset() * 60000;
+      const localISOTime = new Date(dateObj.getTime() - tzOffset).toISOString().slice(0, 16);
+      editValue.value = localISOTime;
+    } else {
+      editValue.value = null;
+    }
+    
   } else {
     editValue.value = props.data[field.key]
   }
@@ -150,7 +165,6 @@ const handleRemoveParticipant = (participant: TaskParticipant) => {
   emit('remove:participant', participant)
 }
 
-// Отмена редактирования (по Esc)
 const cancelEdit = () => {
   editingField.value = null
   editValue.value = null
@@ -158,9 +172,35 @@ const cancelEdit = () => {
 
 const saveEdit = (field: PanelFieldConfig) => {
   if (editingField.value === field.key) {
-    if (editValue.value !== props.data[field.key]) {
-      emit('update:field', { key: field.key, value: editValue.value })
+    
+    let valueToEmit = editValue.value;
+    let hasChanged = false;
+
+    if (field.type === 'date') {
+      if (!valueToEmit) {
+        valueToEmit = null;
+        hasChanged = props.data[field.key] != null;
+      } else {
+        let originalFormatted = null;
+        
+        if (props.data[field.key]) {
+          const d = new Date(props.data[field.key]);
+          if (!isNaN(d.getTime())) {
+            const tzOffset = d.getTimezoneOffset() * 60000;
+            originalFormatted = new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
+          }
+        }
+        
+        hasChanged = valueToEmit !== originalFormatted;
+      }
+    } else {
+      hasChanged = valueToEmit !== props.data[field.key];
     }
+
+    if (hasChanged) {
+      emit('update:field', { key: field.key, value: valueToEmit })
+    }
+    
     editingField.value = null
   }
 }

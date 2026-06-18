@@ -116,6 +116,12 @@ const routes = [
         meta: { breadcrumb: 'Отчеты' }
       },
       {
+        path: 'my-tasks',
+        name: 'MyTasksList',
+        component: () => import('../pages/workspace/MyTasksList.vue'),
+        meta: { breadcrumb: 'Мои задачи' }
+      },
+      {
         path: 'settings',
         name: 'WorkspaceSettings',
         component: () => import('../pages/workspace/WorkspaceSettings.vue'),

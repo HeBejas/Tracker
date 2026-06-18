@@ -78,4 +78,13 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<Map<String, Object>>> getMyTasks(
+            @RequestParam Long workspaceId,
+            @RequestParam Long userId
+    ) {
+        List<Map<String, Object>> myTasks = taskService.getMyTasksInWorkspace(workspaceId, userId);
+        return ResponseEntity.ok(myTasks);
+    }
 }
