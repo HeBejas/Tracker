@@ -1,6 +1,8 @@
 package com.aleksandrov.tracker.controller;
 
 import com.aleksandrov.tracker.dto.CreateTaskDto;
+import com.aleksandrov.tracker.dto.TaskParticipantDto;
+import com.aleksandrov.tracker.dto.TaskParticipantResponseDto;
 import com.aleksandrov.tracker.dto.TaskResponseDto;
 
 import com.aleksandrov.tracker.model.Task;
@@ -51,6 +53,15 @@ public class TaskController {
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         Task updatedTask = taskService.updateTaskFields(id, updates);
         return ResponseEntity.ok(updatedTask);
+    }
+
+    @PostMapping("/{id}/participants")
+    public ResponseEntity<TaskParticipantResponseDto> addTaskParticipant(
+            @PathVariable Long id,
+            @RequestBody TaskParticipantDto participant
+    ) {
+        TaskParticipantResponseDto response = taskService.addTaskParticipant(id, participant);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")

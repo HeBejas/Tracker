@@ -3,6 +3,7 @@ package com.aleksandrov.tracker.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.OffsetDateTime;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -77,4 +78,8 @@ public class Task {
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TaskParticipant> participants;
 }

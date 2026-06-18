@@ -1,15 +1,19 @@
 package com.aleksandrov.tracker.service;
 
 import com.aleksandrov.tracker.dto.CreateTaskDto;
+import com.aleksandrov.tracker.dto.TaskParticipantDto;
+import com.aleksandrov.tracker.dto.TaskParticipantResponseDto;
 import com.aleksandrov.tracker.dto.TaskResponseDto;
 
 import com.aleksandrov.tracker.model.Task;
+import com.aleksandrov.tracker.model.TaskParticipant;
 import com.aleksandrov.tracker.model.TaskStatus;
 import com.aleksandrov.tracker.model.TaskPriority;
 import com.aleksandrov.tracker.model.User;
 import com.aleksandrov.tracker.model.Project;
 
 import com.aleksandrov.tracker.repository.TaskRepository;
+import com.aleksandrov.tracker.repository.TaskParticipantRepository;
 import com.aleksandrov.tracker.repository.TaskStatusRepository;
 import com.aleksandrov.tracker.repository.TaskPriorityRepository;
 import com.aleksandrov.tracker.repository.UserRepository;
@@ -28,6 +32,7 @@ import java.time.OffsetDateTime;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final TaskParticipantRepository taskParticipantRepository;
     private final TaskStatusRepository taskStatusRepository;
     private final TaskPriorityRepository taskPriorityRepository;
     private final UserRepository userRepository;
@@ -64,6 +69,7 @@ public class TaskService {
                 .priorityId(task.getPriority().getId())
                 .deadlineDate(task.getDeadlineDate())
                 .createdAt(task.getCreatedAt())
+                .participants(getTaskParticipants(task.getId()))
                 .build()
         ).toList();
     }
@@ -83,6 +89,7 @@ public class TaskService {
                 .priorityId(task.getPriority().getId())
                 .deadlineDate(task.getDeadlineDate())
                 .createdAt(task.getCreatedAt())
+                .participants(getTaskParticipants(task.getId()))
                 .build();
     }
 
@@ -146,6 +153,36 @@ public class TaskService {
             task.setDeadlineDate(localTime);
         }
         return taskRepository.save(task);
+    }
+
+    public TaskParticipantResponseDto addTaskParticipant(Long taskId, TaskParticipantDto dto) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Задача не найдена"));
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден"));
+
+        TaskParticipant participant = new TaskParticipant();
+        participant.setTask(task);
+        participant.setUser(user);
+        participant.setRoleId(dto.getRoleId());
+        participant.setAssignedAt(OffsetDateTime.now());
+
+        taskParticipantRepository.save(participant);
+        return mapParticipant(participant);
+    }
+
+    private List<TaskParticipantResponseDto> getTaskParticipants(Long taskId) {
+        return taskParticipantRepository.findByTask_Id(taskId).stream().map(this::mapParticipant).toList();
+    }
+
+    private TaskParticipantResponseDto mapParticipant(TaskParticipant participant) {
+        TaskParticipantResponseDto dto = new TaskParticipantResponseDto();
+        dto.setUserId(participant.getUser().getId());
+        dto.setUserName(participant.getUser().getFullName());
+        dto.setRoleId(participant.getRoleId());
+        dto.setAssignedAt(participant.getAssignedAt());
+        return dto;
     }
 
     public void deleteTask(Long id) {
