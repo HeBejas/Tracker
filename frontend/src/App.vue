@@ -68,6 +68,5 @@ const { toasts, removeToast } = useToast()
   flex-grow: 1;
   padding: 20px;
   overflow-y: auto;
-  background-color: #f9f9f9;
 }
 </style>

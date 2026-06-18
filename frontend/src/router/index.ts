@@ -11,7 +11,6 @@ const routes = [
   { path: '/', redirect: '/login', meta: { HideLayout: true }},
   { path: '/login', name: 'Login', component: () => import('../pages/LoginPage.vue'), meta: { HideLayout: true, requiresAuth: false }},
   { path: '/profile', name: 'Profile', component: () => import('../pages/ProfilePage.vue'), meta: { breadcrumb: 'Мой профиль', requiresAuth: true }},
-  // { path: '/home', name: 'Home', component: () => import('../pages/HomePage.vue'), meta: { breadcrumb: 'Главная', requiresAuth: true  }},
   {
     path: '/workspaces/:id',
     component: () => import('../pages/workspace/WorkspaceLayout.vue'),

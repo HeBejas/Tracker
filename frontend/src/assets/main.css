@@ -4,6 +4,7 @@
 @import './toasts.css';
 @import './badges.css';
 @import './fields.css';
+@import './dashboard.css';
 
 body {
     margin: 0;
