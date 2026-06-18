@@ -1,0 +1,84 @@
+/* --- Режим просмотра --- */
+.view-mode-container {
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.view-mode-container.is-editable {
+  cursor: pointer;
+}
+
+.view-mode-container.is-editable:hover {
+  background-color: #f9fafb;
+  border-radius: 4px;
+}
+
+.content-render {
+  flex: 1;
+  overflow: hidden;
+}
+
+.edit-icon {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.view-mode-container.is-editable:hover .edit-icon {
+  opacity: 1;
+  transform: translateX(0);
+  color: #6b7280;
+}
+
+/* --- Значения --- */
+.text-value {
+  font-size: 14px;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.text-empty {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* --- Режим редактирования --- */
+.edit-mode-container {
+  width: 100%;
+  margin-left: -8px;
+}
+
+.pro-input {
+  width: 100%;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #111827;
+  background-color: #ffffff;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+  font-family: inherit;
+  transition: box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.pro-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+  padding-right: 28px;
+}

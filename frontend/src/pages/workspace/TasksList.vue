@@ -51,19 +51,19 @@ const output_columns: TableColumn[] = [
   { key: 'projectName', label: 'Проект', sortable: true, filterable: true }, // Новая колонка от бэкенда
   { key: 'statusId', label: 'Статус', sortable: true, filterable: true,
     options: [
-      { value: 1, label: 'Новая' },
-      { value: 2, label: 'В работе' },
-      { value: 3, label: 'На проверке' },
-      { value: 4, label: 'Завершена' },
-      { value: 5, label: 'Отменена' },
+      { value: 1, label: 'Новая', colorClass: 'badge badge-new' },
+      { value: 2, label: 'В работе', colorClass: 'badge badge-working' },
+      { value: 3, label: 'На проверке', colorClass: 'badge badge-check' },
+      { value: 4, label: 'Завершена', colorClass: 'badge badge-done' },
+      { value: 5, label: 'Отменена', colorClass: 'badge badge-cancelled' }
     ]
   },
   { key: 'priorityId', label: 'Приоритет', sortable: true, filterable: true,
     options: [
-      { value: 1, label: 'Низкий' },
-      { value: 2, label: 'Средний' },
-      { value: 3, label: 'Высокий' },
-      { value: 4, label: 'Критичный' },
+      { value: 1, label: 'Низкий', colorClass: 'badge badge-white'  },
+      { value: 2, label: 'Средний', colorClass: 'badge badge-blue' },
+      { value: 3, label: 'Высокий', colorClass: 'badge badge-red' },
+      { value: 4, label: 'Критичный', colorClass: 'badge badge-yellow' }
     ]
   },
   { key: 'deadlineDate', label: 'Дедлайн', type: 'date', sortable: true, filterable: true },

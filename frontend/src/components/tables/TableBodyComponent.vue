@@ -32,7 +32,9 @@
           </div>
 
           <template v-else>
-            {{ renderCellValue(row, col) }}
+            <span :class="col.options?.find(opt => opt.value === row[col.key])?.colorClass">
+              {{ renderCellValue(row, col) }}
+            </span>
           </template>
 
         </td>
@@ -52,6 +54,7 @@
 interface ColumnOption {
   value: any
   label: string
+  colorClass?: string
 }
 
 interface Column {

@@ -6,6 +6,7 @@ import TableBodyComponent from './TableBodyComponent.vue'
 export interface ColumnOption {
   value: string | number
   label: string
+  colorClass?: string
 }
 
 export interface TableColumn {

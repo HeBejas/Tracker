@@ -64,6 +64,15 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @DeleteMapping("/{id}/participants")
+    public ResponseEntity<Void> removeTaskParticipant(
+            @PathVariable Long id,
+            @RequestBody TaskParticipantDto participant
+    ) {
+        taskService.removeTaskParticipant(id, participant.getUserId(), participant.getRoleId());
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);

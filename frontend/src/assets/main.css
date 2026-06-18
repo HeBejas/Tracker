@@ -2,6 +2,8 @@
 @import './modal.css';
 @import './frame.css';
 @import './toasts.css';
+@import './badges.css';
+@import './fields.css';
 
 body {
     margin: 0;

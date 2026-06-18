@@ -47,11 +47,11 @@ const output_columns: TableColumn[] = [
   { key: 'name', label: 'Название', sortable: true, name_field: true },
   { key: 'statusId', label: 'Статус', filterable: true,
     options: [
-      { value: 1, label: 'В работе' },
-      { value: 2, label: 'Приостановлен' },
-      { value: 3, label: 'Завершен' },
-      { value: 4, label: 'Отменен' },
-      { value: 5, label: 'Новый' },
+      { value: 1, label: 'В работе', colorClass: 'badge badge-working' },
+      { value: 2, label: 'Приостановлен', colorClass: 'badge badge-paused' },
+      { value: 3, label: 'Завершен', colorClass: 'badge badge-completed' },
+      { value: 4, label: 'Отменен', colorClass: 'badge badge-cancelled' },
+      { value: 5, label: 'Новый', colorClass: 'badge badge-new' },
     ]
   },
   { key: 'progress', label: 'Прогресс', type: 'progress-bar', from: 'totalTasksCount', to: 'completedTasksCount', sortable: false },

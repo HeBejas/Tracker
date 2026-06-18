@@ -1,3 +1,10 @@
+export interface TaskParticipant {
+    userId: number;
+    userName: string;
+    roleId: number;
+    assignedAt: string;
+}
+
 export interface Task {
     id: number;
     projectId: number;
@@ -13,4 +20,5 @@ export interface Task {
     completedAt: string | null;
     createdAt: string;
     updatedAt: string;
+    participants?: TaskParticipant[];
 }

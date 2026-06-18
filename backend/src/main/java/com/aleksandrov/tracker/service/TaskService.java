@@ -172,6 +172,11 @@ public class TaskService {
         return mapParticipant(participant);
     }
 
+    public void removeTaskParticipant(Long taskId, Long userId, Long roleId) {
+        taskParticipantRepository.findByTaskAndUserAndRole(taskId, userId, roleId)
+                .ifPresent(taskParticipantRepository::delete);
+    }
+
     private List<TaskParticipantResponseDto> getTaskParticipants(Long taskId) {
         return taskParticipantRepository.findByTask_Id(taskId).stream().map(this::mapParticipant).toList();
     }

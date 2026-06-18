@@ -1,0 +1,21 @@
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+}
+.badge-new { background: #f3f4f6; color: #4b5563; } /* Новый */
+.badge-working { background: #e0e7ff; color: #4338ca; } /* В работе */
+.badge-check { background: #fef3c7; color: #d97706; } /* Проверка */
+.badge-done { background: #dcfce3; color: #166534; } /* Завершен */
+.badge-cancelled { background: #fee2e2; color: #b91c1c; } /* Отменен */
+.badge-paused { background: #f3e8ff; color: #7e22ce; }
+
+.badge-white { background: #f3f4f6; color: #4b5563; } 
+.badge-blue { background: #e0e7ff; color: #4338ca; } 
+.badge-yellow { background: #fef3c7; color: #d97706; } 
+.badge-green { background: #dcfce3; color: #166534; } 
+.badge-red { background: #fee2e2; color: #b91c1c; } 
+

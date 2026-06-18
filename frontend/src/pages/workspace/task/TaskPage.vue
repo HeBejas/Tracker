@@ -23,7 +23,10 @@
           class="object-info-panel"
           :fields="taskConfig"
           :data="task"
+          :workspace-id="workspaceId"
           @update:field="handleFieldUpdate"
+          @add:participant="handleAddParticipant"
+          @remove:participant="handleRemoveParticipant"
       />
     </div>
   </FrameWrapperComponent>
@@ -42,8 +45,7 @@ import { useRoute } from 'vue-router'
 import { currentTaskName } from '@/router'
 import { buildCommentTree, addCommentToTree } from '@/utils/commentUtils'
 
-
-import type { Task } from '@/types/task'
+import type { Task, TaskParticipant } from '@/types/task'
 import type { Comment } from '@/types/comment'
 import type { PanelFieldConfig } from '@/types/panel'
 import {deleteCommentFromTree} from "../../../utils/commentUtils";
@@ -59,6 +61,7 @@ const props = defineProps<{
   task: Task
 }>()
 const route = useRoute()
+const workspaceId = Number(route.params.id) || 0
 
 //Панель информации
 const taskConfig: PanelFieldConfig[] = [
@@ -68,25 +71,25 @@ const taskConfig: PanelFieldConfig[] = [
     key: 'statusId',
     label: 'Статус',
     options: [
-      { value: 1, label: 'Новая' },
-      { value: 2, label: 'В работе' },
-      { value: 3, label: 'На проверке' },
-      { value: 4, label: 'Завершена' },
-      { value: 5, label: 'Отменена' },
-    ]
+    { value: 1, label: 'Новая', colorClass: 'badge-new' },
+    { value: 2, label: 'В работе', colorClass: 'badge-working' },
+    { value: 3, label: 'На проверке', colorClass: 'badge-check' },
+    { value: 4, label: 'Завершена', colorClass: 'badge-done' },
+    { value: 5, label: 'Отменена', colorClass: 'badge-cancelled' },
+  ]
   },
   {
     key: 'priorityId',
     label: 'Приоритет',
     options: [
-      { value: 1, label: 'Низкий' },
-      { value: 2, label: 'Средний' },
-      { value: 3, label: 'Высокий' },
-      { value: 4, label: 'Критичный' },
+      { value: 1, label: 'Низкий', colorClass: 'badge-white' },
+      { value: 2, label: 'Средний', colorClass: 'badge-blue' },
+      { value: 3, label: 'Высокий', colorClass: 'badge-red' },
+      { value: 4, label: 'Критичный', colorClass: 'badge-yellow' },
     ]
   },
-  // { key: 'authorId', label: 'Автор', type: 'number', sortable: true, filterable: false },
   { key: 'authorName', label: 'Автор', type: 'text', sortable: true, filterable: true, readonly: true },
+  { key: 'participants', label: 'Исполнитель', type: 'participants' },
   { key: 'deadlineDate', label: 'Дедлайн', type: 'date' },
   { key: 'completedAt', label: 'Дата завершения', type: 'date', readonly: true },
   { key: 'createdAt', label: 'Создана', type: 'date', readonly: true },
@@ -182,6 +185,44 @@ const confirmDeleteComment = async() => {
 const closeDeleteModal = () => {
   showDeleteModal.value = false
   currentCommentId.value = null
+}
+
+const handleAddParticipant = async ({ userId, roleId }: { userId: number; roleId: number }) => {
+  try {
+    const response = await axios.post(`/api/tasks/${props.task.id}/participants`, {
+      userId,
+      roleId
+    })
+    const newParticipant: TaskParticipant = response.data
+    if (!props.task.participants) {
+      props.task.participants = []
+    }
+    props.task.participants.push(newParticipant)
+    toast.success('Исполнитель добавлен')
+  } catch (error) {
+    console.error(error)
+    toast.error('Ошибка при добавлении исполнителя')
+  }
+}
+
+const handleRemoveParticipant = async (participant: TaskParticipant) => {
+  try {
+    await axios.delete(`/api/tasks/${props.task.id}/participants`, {
+      data: {
+        userId: participant.userId,
+        roleId: participant.roleId
+      }
+    })
+    if (props.task.participants) {
+      props.task.participants = props.task.participants.filter(
+        p => p.userId !== participant.userId || p.roleId !== participant.roleId
+      )
+    }
+    toast.success('Исполнитель удален')
+  } catch (error) {
+    console.error(error)
+    toast.error('Ошибка при удалении исполнителя')
+  }
 }
 
 onMounted(() => {
