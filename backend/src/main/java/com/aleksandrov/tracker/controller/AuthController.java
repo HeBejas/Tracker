@@ -31,15 +31,6 @@ public class AuthController {
         }
     }
 
-    @PutMapping("/change-password/{userId}")
-        try {
-            authService.changePassword(userId, request.oldPassword(), request.newPassword());
-            return ResponseEntity.ok("Пароль успешно изменён");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     @PostMapping("/invite/employee")
     public ResponseEntity<?> inviteEmployee(@RequestBody EmployeeInviteRequest request) {
         try{
@@ -70,6 +61,14 @@ public class AuthController {
         }
     }
 
-
+    @PutMapping("/change-password/{userId}")
+    public ResponseEntity<?> changePassword(@PathVariable Long userId, @RequestBody ChangePasswordRequest request){
+        try {
+            authService.changePassword(userId, request.oldPassword(), request.newPassword());
+            return ResponseEntity.ok("Пароль успешно изменён");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }

@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 @Data //Lombok создает шаблонные команды
 public class User {
 
-    @Id // Отмечает поле PK
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //указывает стратегию автоматического создания ID
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "workspace_id") // АННОТАЦИЯ. Параметры колонки
+    @Column(name = "workspace_id")
     private Integer workspaceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
